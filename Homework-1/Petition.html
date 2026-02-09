@@ -1,0 +1,279 @@
+<!-- 
+ Author: Camille Orego
+ Course: CPTS 489 - Web Development
+ Assignment: Homework 1 - Petition Page
+ GitHub: https://github.com/Azantei/489-Homework/Homework-1
+ 
+ AI Disclosure:  This assignment was created with assistance 
+ from Claude AI (Anthropic) for educational 
+ purposes. AI was used to learn HTML/CSS 
+ structure, layout techniques, and debugging. 
+  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AcmePetition.org - Move CPTS 489 to Afternoon in Winter!</title>
+
+    <!-- CSS Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background-color: #F4F4F4;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: #3A3A3A;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        nav a {
+            color: #FFFFFF;
+            text-decoration: none;
+            margin: 0 30px;
+            font-size: 16px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+        /* End Navigation Bar Styles */
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 50px auto;
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Header Styles */
+
+        /* Main Header */
+        h1 {
+            font-family:'Times New Roman', Times, serif;
+            color: #1A3A8A;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: -0.02em;
+        }
+
+        /* Sub Header */
+        h2 {
+            font-family:'Times New Roman', Times, serif;
+            color: #C41E3A;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: -0.02em;
+        }
+        /* End Header Styles */
+
+        /* Content (Petition) Section with Image */
+        .content-wrapper {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            align-items: flex-start;
+        }
+        .petition-body {
+            flex: 2;
+            text-align: justify;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .petition-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .petition-image img {
+            width: 100%;
+            max-width: 250px;
+            border-radius: 8px;
+        }
+        /* End Content (petition) Section Styles */
+
+        /* Signup Module */
+        .signup-module {
+            margin-top: 40px;
+        }
+
+        .signup-module h2 {
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #CCCCCC;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        input::placeholder {
+            color: #999999;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #0066FF;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .submit-button:hover {
+            background-color: #0052CC;
+        }
+        /* End Signup Module Styles */
+
+        /* Signatures Module */
+        .signatures-module {
+            margin-top: 40px;
+        }
+
+        .signatures-module h2 {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        /* Table Headers and Data Cells */
+
+        /* Header cells */
+        th {
+            background-color: #FFFFFF;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #DDDDDD;
+            font-weight: bold;
+        }
+        
+        /* Data cells */
+        td {
+            padding: 12px;
+            border: 1px solid #DDDDDD;
+        }
+        
+        tr:hover {
+            background-color: #F9F9F9;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #F9F9F9;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #FFFFFF;
+        }
+
+        /* End Signatures Module Styles */
+    </style>
+    <!-- End of CSS Styles -->
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="https://www.google.com">Home</a>
+        <a href="https://www.google.com">About</a>
+        <a href="https://www.google.com">Categories</a>
+        <a href="https://www.google.com">Contact</a>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Title -->
+        <h1>Move CPTS 489 to Afternoon in Winter!</h1>
+
+        <!-- Content -->
+        <div class="content-wrapper">
+            <div class="petition-body">
+                The image you see on the right is a representation of our professor every morning, right before his much-needed coffee that helps thaw him out a bit. Imagine having to wake up at 4 or 5 AM in the dead of winter just to prepare for class. Technically, since the sun hasn't even risen yet, can we really call 4 AM "morning"? The frigid cold, combined with the mental fog of early hours, is an unfair battle both for students and faculty alike. No one should have to endure sub-zero temperatures just to attend an 8 AM lecture. Morning brain freeze inevitably leads to null pointer exceptions in our heads! For these reasons, we humbly request the administration to consider shifting CPTS 489 to a more humane afternoon time slot.
+            </div>
+            <!-- Image -->
+            <div class="petition-image">
+                <img src="s-l400-2.jpg" alt="Jack Nicholson in 'The Shining'">
+            </div>
+        </div>
+
+        <!-- Signup Module -->
+        <div class="signup-module">
+            <h2>Sign the Petition</h2>
+            <form>
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="City" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="State (e.g., WA)" required>
+                </div>
+                <button type="submit" class="submit-button">Sign Petition</button>
+            </form>
+        </div>
+
+        <!-- Signatures Module -->
+        <div class="signatures-module">
+            <h2>Signatures</h2>
+            <table>
+                <!-- Table Row -->
+                <thead>
+                    <!-- Row 1 Header -->
+                    <tr>                 <!-- Row 1 (header row) -->
+                        <th>Name</th>    <!-- Header cell -->
+                        <th>City</th>    <!-- Header cell -->
+                        <th>State</th>   <!-- Header cell -->
+                    </tr>
+                </thead>
+
+                <!-- Data rows -->
+                <tbody>
+                    <tr>                          <!-- Row 2 (data row) -->
+                        <td>Alice Johnson</td>    <!-- Data cell -->
+                        <td>Seattle</td>          <!-- Data cell -->
+                        <td>WA</td>               <!-- Data cell -->
+                    </tr>
+                    <tr>
+                        <td>Bob Smith</td>
+                        <td>Portland</td>
+                        <td>OR</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
