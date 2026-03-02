@@ -1,0 +1,235 @@
+Assignment 2: Sign the Petition -- Front End JavaScript and DHTML
+Due: Sun Mar 8, 2026 11:59pmDue: Sun Mar 8, 2026 11:59pm
+Ungraded, 50 Possible Points
+50 Points Possible
+Attempt
+Attempt 1
+
+In Progress
+NEXT UP: Submit Assignment
+
+Unlimited Attempts Allowed
+Available until Mar 13, 2026 11:pastedHe has a video attached but no transcript which kind of sucks. Do you think you can pull the gist out without the video?10:23 AMYes, the assignment description is detailed enough that the video is mostly supplementary. Here's what you can confidently infer:
+What the video likely shows:
+
+The form starts with base fields (Name, Email, City, State) + a "Signer Type" dropdown
+Selecting a signer type reveals a new sub-section of fields below it; switching types swaps the sub-section; deselecting hides it
+Submitting a valid form adds a row to a table on the page (no reload)
+Each table row has a "more" link that opens a Bootstrap modal with full details
+
+What the video is NOT needed for:
+
+The specific fields per signer type — fully listed in the table
+Validation rules — fully specified
+Table columns — stated explicitly (Name, City, Signer Type, "more" link)
+Modal contents — stated explicitly (all fields including conditionals)
+
+The one thing you're missing from the video:
+The professor mentions "my code (video) does not have all the necessary validations" — so the video is actually a slightly incomplete reference. Your implementation following the written spec will be more correct than what's in the video.
+Bottom line: You can build the entire assignment from the written spec alone. The video was mainly there to show the conditional form element behavior in action, which is fully describable from the signer type table. You're not missing anything critical.
+Want help starting on the code?Most of the video is just going over the conditional formatting. Let me give you my code and maybe some of the images from the video?10:46 AMYes, please share both! That would be really helpful. Go ahead and paste your code and upload whatever screenshots/images you grabbed from the video.Petition.html274 lineshtml10:47 AMThese screenshots are super helpful! Now I have a very clear picture of exactly what to build. Let me note what I can see:
+
+Screenshot 1: Default form state + table with 4 seed rows (Alice/Student, Bob/Military, Carol/Faculty, David/Industry), columns: Name, City, Type, Details
+Screenshot 2: Error message in red below comment box: "Please fill in all required fields and select your signer type."
+Screenshot 3: Faculty/Staff selected → sub-section with light blue-ish left border, "Your role:" dropdown (-- Select --) + "Department:" text field (e.g., School of EECS)
+Screenshot 4: "Other" selected → sub-section with "Please describe your affiliation:" textarea
+Screenshot 5: After successful submission → form cleared, new row ("aa / aa / Other") added to table
+Screenshot 6: Industry Professional selected → "Your industry sector:" dropdown + "Company name (optional):" text field
+Screenshot 7: Modal — title "Details: [Name]", table layout with bold labels (Name, Email, City, State, Signer Type, then conditional fields, Comment), "Close" button. City shown uppercased (PULLMAN). State also uppercased (WA).
+
+Ready to build it! Want me to go ahead and write the complete Petition2.html, Petition2.css, and Petition2.js?I think I ... should I have them separate? the first one I made you can see it's all one file10:49 AMLooking at the assignment requirements, it says:
+
+"Petition2.js -- your JavaScript (can be separate or embedded, your choice)"
+"Petition2.css -- your stylesheet (can be separate or embedded, your choice)"
+
+So either works for grading. That said, for this assignment I'd actually recommend keeping them separate for one practical reason: your explanation video requires you to show the relevant HTML and JavaScript for each topic. If everything is crammed into one file, jumping between sections during the video gets messy. Separate files make it much easier to say "here's the HTML, here's the JS that handles it."
+Your Assignment 1 being one file is totally fine — it had no JS at all. But now that you're adding a meaningful amount of JavaScript, separate files will serve you better both for the video and just for readability.
+So my recommendation: 3 files — Petition2.html, Petition2.css, Petition2.js. Want me to build all three?Are there things I should separate in my original file then?10:49 AMYes! Your original file has everything in a <style> block in the <head>. You'd just move that into Petition2.css and link it. It's a simple split:
+From Petition.html, move this → into Petition2.css:
+css* { margin: 0; padding: 0; ... }
+body { font-family: ... }
+nav { ... }
+/* etc — everything inside your <style> tags */
+Then in Petition2.html, replace the <style> block with:
+html<link rel="stylesheet" href="Petition2.css">
+And you'll add new CSS to Petition2.css for the new stuff (the sub-section styling, the blue left border on conditional sections, error message styling, modal tweaks).
+That's genuinely the only thing to separate from your original. The HTML structure itself stays, you're just adding to it (the signer type dropdown, sub-sections, comment box, modal). And then Petition2.js is brand new — you had no JavaScript at all in Assignment 1.
+Want me to go ahead and write all three files now?So you know what? let's just do the assignment and we can split from there. So yeah give me the finished Homework 2 and the 3 separate files.10:50 AMLet me read the skill files first to make sure I produce the best output, then I'll build everything.Viewed 2 filesViewed 2 filesCheck available skillsRead frontend design skillDoneNow let me build all three files. I'll stay true to your existing aesthetic (it already looks clean and professional) and just extend it naturally.Created 3 files, read a fileCreated 3 files, read a fileCreating Petition2.css - extended styles from Assignment 1 plus new styles for conditional sections, error, modalPetition2.cssCreating Petition2.js - all JavaScript for conditional sections, validation, table rows, and modalPetition2.jsCreating Petition2.html - the main HTML file linking to external CSS and JSPetition2.htmlPresented 3 filesDoneAll three files are ready! Here's a quick rundown of what was built:
+Petition2.html — Your Assignment 1 structure extended with the signer type dropdown, all 5 conditional sub-sections (hidden by default), the comment textarea, error message div, updated table headers (Name/City/Type/Details), and the Bootstrap modal at the bottom.
+Petition2.css — All your original styles pulled out, plus new ones for: the conditional sub-sections (light blue left border, soft background), the error message in red, the "more »" links, and the modal detail table layout.
+Petition2.js — Fully commented and handles:
+
+Seed data (4 rows: Alice/Student, Bob/Military, Carol/Faculty, David/Industry)
+Show/hide conditional sections on dropdown change
+Full validation with descriptive error messages
+Adding rows dynamically on valid submit + clearing the form
+Modal population with the right data per row (city and state uppercased)
+
+To test locally, just drop all three files plus your s-l400-2.jpg image into the same folder and open Petition2.html in a browser. Let me know if you want to tweak anything!Petition2Code · HTML DownloadPetition2Code · CSS DownloadPetition2JS DownloadDownload allWell I guess that's that. What I need now is the next part for the video. So 3 parts11:15 AMLooking back at the assignment requirements for the video:
+Topic A (10 pts) — Conditional Form Elements
+
+Show the HTML + JS for how sub-sections appear/disappear
+Demo it in the browser
+Explain one alternative technique and justify your choice
+
+Topic B (10 pts) — Adding Rows Dynamically
+
+Show the JS that adds a table row
+Demo by submitting the form
+Explain one alternative technique and justify your choice
+
+Topic C (5 pts) — Bootstrap Modal
+
+Show the modal HTML markup + the JS that triggers and populates it
+Demo by clicking "more »" and walk through what the code does step by step
+No alternative technique needed
+
+Before I help you script/outline it — a few questions:What do you need help with for the video, and how comfortable are you explaining the code?Q: What do you need help with for the video? (Select all that apply)
+A: Let's just break it down into Topic A, B and C and what to highlight for the technical discussion and the research/alternate technique example. ALso if we have time a way to show the functionality, i.e. have a quick fix error I can fix to show behavior (in the last one I did like padding or something) that's relevant to the assignmentQ: How comfortable are you explaining the code?
+A: I'd like you to explain the 'why' so I can talk through it11:17 AMPerfect. Let me break down all three topics for you with the technical explanations, what to highlight, the alternatives, and a demo trick for each.
+
+Topic A — Conditional Form Elements (10 pts)
+What to show on screen:
+Open Petition2.html and Petition2.js side by side. Point to handleSignerTypeChange() and the conditional section divs in the HTML.
+The "why" to talk through:
+The conditional sections all exist in the HTML from the start — they're just hidden. Each one has the class conditional-section, and in the CSS that class has display: none. When the user picks a signer type, the JS function handleSignerTypeChange() fires. It first loops through all sections and strips the visible class from them (so switching types cleans up the previous one), then adds visible only to the matching section. In the CSS, .conditional-section.visible sets display: block — that's the only thing making them appear and disappear. The JS never directly touches display — it just manages classes, and CSS does the visual work.
+Alternative technique to research:
+
+"Instead of toggling a CSS class, you could manipulate element.style.display directly in JavaScript — setting it to 'block' to show and 'none' to hide."
+
+Justify your choice:
+The CSS class approach is cleaner because the styling logic stays in CSS where it belongs. If you ever want to add a transition or animation to the reveal, you just update the CSS — you don't touch the JS. Direct style manipulation mixes presentation into your logic, which gets messy.
+Demo trick — live fix:
+In Petition2.css, find .conditional-section and temporarily change display: none to display: block. Save and refresh — all sub-sections will be visible at once, which looks broken. Then explain "this is why the CSS class approach matters — the default state needs to be hidden," and change it back. It's a natural, relevant demonstration.
+
+Topic B — Adding Rows Dynamically (10 pts)
+What to show on screen:
+Point to addTableRow() in Petition2.js and show getElementById("signaturesBody") in the HTML.
+The "why" to talk through:
+When validation passes, handleSubmit() builds a sig object with all the form data, then passes it to addTableRow(). Inside that function, the code uses document.createElement() to build each piece — a <tr>, then individual <td> elements for Name, City, Type, and the "more" link. Each <td> gets its text set with .textContent, then gets appended to the row with appendChild(). Finally the row gets appended to the <tbody>. No page reload — the DOM updates instantly. The "more" link also gets an event listener attached right at this moment, with a closure over the sig object so it always opens the modal for that specific row's data.
+Alternative technique to research:
+
+"Instead of createElement + appendChild, you could build the entire row as an HTML string and inject it using innerHTML or insertAdjacentHTML()."
+
+For example:
+jstbody.insertAdjacentHTML('beforeend', `<tr><td>${sig.name}</td>...</tr>`);
+Justify your choice:
+createElement is safer — innerHTML can be a security risk if any user input contains HTML characters (imagine someone typing <script> in the Name field). It's also easier to attach event listeners to specific elements when you have a direct reference to them, which you need for the "more" link closure.
+Demo trick — live fix:
+In addTableRow(), temporarily comment out the tbody.appendChild(tr) line. Submit a valid form — nothing appears in the table. Then uncomment it, resubmit — row appears. Simple and makes the point that appendChild is the actual moment the DOM updates.
+
+Topic C — Bootstrap Modal (5 pts)
+What to show on screen:
+Show the modal HTML in Petition2.html (the <div class="modal fade" id="detailModal"> block), then show openModal() in Petition2.js.
+The "why" to talk through:
+The modal markup lives in the HTML the whole time — Bootstrap keeps it hidden until triggered. When a "more »" link is clicked, it calls openModal(sig) with that row's specific sig object (this works because of the closure in addTableRow — each link "remembers" its own data). Inside openModal(), the code sets the modal title, then loops through an array of label/value pairs — name, email, city, state, signer type, any conditional fields, and comment — and dynamically builds table rows in #modalDetailTable. City and state get .toUpperCase() called on them, which is why they appear in all caps. Then new bootstrap.Modal(modalEl).show() is called — that's Bootstrap's JS API to trigger the display. No display toggling needed — Bootstrap handles all of that internally.
+The key thing that makes each "more" link show the right data is the closure. When addTableRow() runs, the event listener captures the sig variable at that moment. Each row gets its own listener with its own sig — so clicking Alice's link always opens Alice's data, never Bob's.
+Demo trick — live fix:
+In openModal(), temporarily remove the .toUpperCase() call on city. Show the modal — city appears lowercase. Add it back — city appears uppercased like in the spec. Quick, directly relevant to the assignment requirement.
+
+Want me to put any of these into a more formal written script, or does this give you enough to talk through naturally?I only get 8 minutes so maybe give me a script and what to click/change11:35 AMHere's your full 8-minute script. I'd budget roughly 2:30 for A, 2:30 for B, and 2:00 for C — that leaves a little breathing room.
+
+Topic A — Conditional Form Elements (~2:30)
+[Show browser with Petition2.html open]
+
+"For Topic A I'm going to show how the conditional form sections appear and disappear when you change the Signer Type dropdown."
+
+[Click the "-- I am a ... --" dropdown, select "Student"]
+
+"When I select Student, a sub-section appears below the dropdown with an Academic Level dropdown and a Major field. If I switch to Faculty..."
+
+[Switch to "Faculty / Staff"]
+
+"...the Student section disappears and the Faculty section takes its place. That's the core behavior. Let me show you how it works in the code."
+
+[Switch to Petition2.js, scroll to handleSignerTypeChange()]
+
+"This function fires every time the dropdown changes. The first thing it does is loop through every element with the class conditional-section and remove the visible class from all of them — that's what clears the previous sub-section. Then it checks which signer type was selected and adds visible back to just that one section."
+
+[Switch to Petition2.css, show .conditional-section and .conditional-section.visible]
+
+"The actual showing and hiding happens entirely in CSS. conditional-section by default has display: none — so everything is hidden on load. When the visible class gets added by JavaScript, .conditional-section.visible sets display: block and it appears. The JS never directly touches display — it just manages classes."
+
+[Now the demo fix — in Petition2.css change display: none to display: block on .conditional-section, save, refresh browser]
+
+"To show why this matters — I'll temporarily change the default to display block."
+
+[Show browser — all sub-sections visible at once, looks broken]
+
+"Now all five sub-sections are showing at once because none of them are hidden by default. That's obviously wrong. Let me put it back."
+
+[Change back to display: none, save, refresh]
+
+"And now it works correctly again. That's exactly why the default state in CSS has to be none."
+
+[Alternative]
+
+"The alternative technique would be manipulating element.style.display directly in JavaScript — setting it to 'block' or 'none' inline. I chose the CSS class approach instead because it keeps styling logic in CSS where it belongs. If I ever wanted to add a fade-in animation to the reveal, I'd just update the CSS — I wouldn't need to touch the JavaScript at all."
+
+
+Topic B — Adding Rows Dynamically (~2:30)
+[Switch to browser, fill out the form with valid data — something short like "Camille Orego", a valid email, city, state, pick any signer type and its dropdown]
+
+"For Topic B I'll show how a new row gets added to the Signatures table when the form is submitted successfully."
+
+[Click Sign Petition — row appears]
+
+"The row appears instantly without any page reload. Let me show the code behind that."
+
+[Switch to Petition2.js, show addTableRow()]
+
+"This function receives a signature object with all the form data. It uses document.createElement('tr') to create a new table row, then creates individual td elements for Name, City, Type, and the more link. Each one gets its text set with .textContent and then gets appended to the row with appendChild. Finally the completed row gets appended to the tbody — that's the exact moment it appears on the page."
+
+[Point to the event listener on the more link inside addTableRow()]
+
+"One important thing happening here — each more link gets its event listener attached right at this moment, and it captures the sig object in a closure. That's what makes each link open the right data — Alice's link remembers Alice's sig object, Bob's remembers Bob's. They never get mixed up."
+
+[Now the demo fix — comment out tbody.appendChild(tr) in addTableRow(), save, refresh, submit the form]
+
+"To show what appendChild actually does — I'll comment it out."
+
+[Submit valid form — nothing appears in table]
+
+"The function runs, the row gets built, but it never gets attached to the DOM so nothing shows up."
+
+[Uncomment tbody.appendChild(tr), save, refresh, submit again]
+
+"Put it back — and now the row appears. That single line is what connects the new row to the live page."
+
+[Alternative]
+
+"The alternative would be using innerHTML or insertAdjacentHTML to inject the row as an HTML string. Something like: tbody.insertAdjacentHTML('beforeend', '<tr><td>name</td>...</tr>'). I chose createElement instead because it's safer — if a user typed something like a script tag in the name field, innerHTML could treat it as actual HTML. With textContent and createElement, user input is always treated as plain text, never executed. It also makes it easier to attach the event listener directly to the more link since I have a reference to the element."
+
+
+Topic C — Bootstrap Modal (~2:00)
+[Switch to browser, click any "more »" link]
+
+"For Topic C — clicking any more link opens a Bootstrap modal with the full details for that specific signature. Name, email, city and state in uppercase, signer type, any conditional fields, and a comment if they left one."
+
+[Switch to Petition2.html, show the modal div]
+
+"The modal markup lives in the HTML the whole time — Bootstrap keeps it invisible until it's triggered. The key parts are the id of detailModal, the modal-title element, and the modalDetailTable tbody where the detail rows get injected."
+
+[Switch to Petition2.js, show openModal()]
+
+"When a more link is clicked, openModal() runs with that row's sig object. It sets the title, then builds an array of label-value pairs — name, email, city, state, signer type, conditional fields, comment. City and state get .toUpperCase() called on them per the spec. Then it loops through those pairs and creates table rows dynamically, same createElement approach as before. Finally this line — new bootstrap.Modal(modalEl).show() — that's Bootstrap's JavaScript API that handles all the animation and overlay. I don't need to touch display at all, Bootstrap manages that."
+
+[Demo fix — in openModal(), remove .toUpperCase() from city, save, refresh, click a more link]
+
+"The spec says city should be uppercased in the modal. If I remove that call..."
+
+[Show modal — city is lowercase]
+
+"City shows lowercase. Put it back..."
+
+[Restore .toUpperCase(), save, refresh, click more link]
+
+"And now it's uppercase as required. That's the full modal implementation."
+
+
+[Wrap up — 15 seconds]
+
+"So to summarize — Topic A used CSS class toggling for conditional sections, Topic B used createElement and appendChild for dynamic rows, and Topic C used Bootstrap's modal API with closures to keep each row's data tied to its own more link. Thanks for watching."
+
+
+That should land right around 7:30-8:00 if you speak at a normal pace. Want me to tighten anything or adjust the timing on any section?
