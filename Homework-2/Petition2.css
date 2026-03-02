@@ -1,0 +1,277 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Helvetica', sans-serif;
+    background-color: #F4F4F4;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #3A3A3A;
+    padding: 15px 0;
+    text-align: center;
+}
+
+nav a {
+    color: #FFFFFF;
+    text-decoration: none;
+    margin: 0 30px;
+    font-size: 16px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Main Container */
+.container {
+    max-width: 900px;
+    margin: 50px auto;
+    background-color: #FFFFFF;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Header Styles */
+h1 {
+    font-family: 'Times New Roman', Times, serif;
+    color: #1A3A8A;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: -0.02em;
+}
+
+h2 {
+    font-family: 'Times New Roman', Times, serif;
+    color: #C41E3A;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: -0.02em;
+}
+
+/* Content Section */
+.content-wrapper {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+    align-items: flex-start;
+}
+
+.petition-body {
+    flex: 2;
+    text-align: justify;
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+.petition-image {
+    flex: 1;
+    text-align: center;
+}
+
+.petition-image img {
+    width: 100%;
+    max-width: 250px;
+    border-radius: 8px;
+}
+
+/* Signup Module */
+.signup-module {
+    margin-top: 40px;
+}
+
+.signup-module h2 {
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: 'Helvetica', sans-serif;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #999999;
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Conditional Sub-sections */
+.conditional-section {
+    display: none;
+    border-left: 4px solid #AACCEE;
+    background-color: #F0F5FB;
+    padding: 16px 16px 16px 20px;
+    margin-bottom: 15px;
+    border-radius: 0 4px 4px 0;
+}
+
+.conditional-section.visible {
+    display: block;
+}
+
+.conditional-section label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+}
+
+.conditional-section input[type="text"],
+.conditional-section select,
+.conditional-section textarea {
+    background-color: #FFFFFF;
+    margin-bottom: 12px;
+}
+
+.conditional-section input[type="text"]:last-child,
+.conditional-section select:last-child,
+.conditional-section textarea:last-child {
+    margin-bottom: 0;
+}
+
+/* Error Message */
+.error-message {
+    display: none;
+    color: #C41E3A;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.error-message.visible {
+    display: block;
+}
+
+/* Submit Button */
+.submit-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #0066FF;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.submit-button:hover {
+    background-color: #0052CC;
+}
+
+/* Signatures Module */
+.signatures-module {
+    margin-top: 40px;
+}
+
+.signatures-module h2 {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    background-color: #FFFFFF;
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #DDDDDD;
+    font-weight: bold;
+}
+
+td {
+    padding: 12px;
+    border: 1px solid #DDDDDD;
+}
+
+tr:hover {
+    background-color: #F9F9F9;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #F9F9F9;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #FFFFFF;
+}
+
+.more-link {
+    color: #0066FF;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.more-link:hover {
+    text-decoration: underline;
+}
+
+/* Bootstrap Modal Overrides */
+.modal-title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    color: #1A3A8A;
+}
+
+.modal-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.modal-detail-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #EEEEEE;
+    font-size: 14px;
+    vertical-align: top;
+}
+
+.modal-detail-table td:first-child {
+    font-weight: bold;
+    width: 40%;
+    color: #333;
+}
+
+.modal-detail-table td:last-child {
+    font-style: italic;
+    color: #222;
+}
+
+.modal-detail-table tr:last-child td {
+    border-bottom: none;
+}
