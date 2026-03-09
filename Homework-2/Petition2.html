@@ -3,23 +3,30 @@
  CPTS 489 - Web Development
  Homework 2 - Sign the Petition (DHTML)
  Builds on Assignment 1
+ 
+ This page extends Homework 1 with dynamic JavaScript functionality:
+ - Dynamic form validation
+ - Conditional form sections based on signer type
+ - Interactive signature table with modal details
+ - Bootstrap modal integration
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta Tags: Define character encoding and responsive viewport -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AcmePetition.org - Move CPTS 489 to Afternoon in Winter!</title>
 
-    <!-- Bootstrap CSS (for modal) -->
+    <!-- Bootstrap CSS: External library for modal dialog functionality -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
 
-    <!-- Our stylesheet -->
+    <!-- Our Custom Stylesheet: Contains all page-specific styles -->
     <link rel="stylesheet" href="Petition2.css">
 </head>
 
 <body>
-    <!-- Navigation Bar -->
+    <!-- Navigation Bar: Top menu with links to other sections -->
     <nav>
         <a href="https://www.google.com">Home</a>
         <a href="https://www.google.com">About</a>
@@ -27,13 +34,13 @@
         <a href="https://www.google.com">Contact</a>
     </nav>
 
-    <!-- Main Container -->
+    <!-- Main Container: Central content area with white background -->
     <div class="container">
 
-        <!-- Title -->
+        <!-- Page Title: Main heading for the petition -->
         <h1>Move CPTS 489 to Afternoon in Winter!</h1>
 
-        <!-- Content -->
+        <!-- Content Section: Petition text and image displayed side-by-side -->
         <div class="content-wrapper">
             <div class="petition-body">
                 The image you see on the right is a representation of our professor every morning, right before his 
@@ -51,32 +58,33 @@
         </div>
 
         <!-- ===================== SIGN THE PETITION FORM ===================== -->
+        <!-- This form collects signer information with conditional fields based on signer type -->
         <div class="signup-module">
             <h2>Sign the Petition</h2>
 
             <form id="petitionForm">
 
-                <!-- Name -->
+                <!-- Name Input: Requires at least 5 characters -->
                 <div class="form-group">
                     <input type="text" id="nameInput" placeholder="Your Name">
                 </div>
 
-                <!-- Email -->
+                <!-- Email Input: Validated for proper email format (has @ and domain) -->
                 <div class="form-group">
                     <input type="email" id="emailInput" placeholder="Your Email">
                 </div>
 
-                <!-- City -->
+                <!-- City Input: Required field for location -->
                 <div class="form-group">
                     <input type="text" id="cityInput" placeholder="City">
                 </div>
 
-                <!-- State -->
+                <!-- State Input: Must be exactly 2 characters (e.g., WA) -->
                 <div class="form-group">
                     <input type="text" id="stateInput" placeholder="State (e.g., WA)" maxlength="2">
                 </div>
 
-                <!-- Signer Type Dropdown -->
+                <!-- Signer Type Dropdown: Determines which conditional section appears -->
                 <div class="form-group">
                     <select id="signerType">
                         <option value="">-- I am a ... --</option>
@@ -88,9 +96,10 @@
                     </select>
                 </div>
 
-                <!-- ---- Conditional Sub-sections ---- -->
+                <!-- ==================== Conditional Sub-sections ==================== -->
+                <!-- These sections appear/hide dynamically based on the signer type selected above -->
 
-                <!-- Student -->
+                <!-- Student Section: Shown when "Student" is selected -->
                 <div id="section-student" class="conditional-section">
                     <label for="studentLevel">Academic level:</label>
                     <select id="studentLevel">
@@ -105,7 +114,7 @@
                     <input type="text" id="studentMajor" placeholder="e.g., Computer Science">
                 </div>
 
-                <!-- Faculty / Staff -->
+                <!-- Faculty/Staff Section: Shown when "Faculty" is selected -->
                 <div id="section-faculty" class="conditional-section">
                     <label for="facultyRole">Your role:</label>
                     <select id="facultyRole">
@@ -120,7 +129,7 @@
                     <input type="text" id="facultyDept" placeholder="e.g., School of EECS">
                 </div>
 
-                <!-- Military / Veteran -->
+                <!-- Military/Veteran Section: Shown when "Military" is selected -->
                 <div id="section-military" class="conditional-section">
                     <label for="militaryBranch">Branch:</label>
                     <select id="militaryBranch">
@@ -141,7 +150,7 @@
                     </select>
                 </div>
 
-                <!-- Industry Professional -->
+                <!-- Industry Professional Section: Shown when "Industry" is selected -->
                 <div id="section-industry" class="conditional-section">
                     <label for="industrySector">Your industry sector:</label>
                     <select id="industrySector">
@@ -160,21 +169,21 @@
                     <input type="text" id="industryCompany" placeholder="e.g., Microsoft">
                 </div>
 
-                <!-- Other -->
+                <!-- Other Section: Shown when "Other" is selected, allows free-form text -->
                 <div id="section-other" class="conditional-section">
                     <label for="otherAffiliation">Please describe your affiliation:</label>
                     <textarea id="otherAffiliation" placeholder="Describe your affiliation..."></textarea>
                 </div>
 
-                <!-- Comment (always visible) -->
+                <!-- Comment Field: Optional text area, always visible regardless of signer type -->
                 <div class="form-group">
                     <textarea id="commentInput" placeholder="Leave a comment (optional)"></textarea>
                 </div>
 
-                <!-- Error Message -->
+                <!-- Error Message: Displayed by JavaScript when validation fails -->
                 <div id="formError" class="error-message"></div>
 
-                <!-- Submit Button -->
+                <!-- Submit Button: Triggers form validation and signature submission -->
                 <button type="submit" class="submit-button">Sign Petition</button>
 
             </form>
@@ -182,9 +191,11 @@
         <!-- ===================== END FORM ===================== -->
 
         <!-- ===================== SIGNATURES TABLE ===================== -->
+        <!-- Displays all petition signatures with a "more" link to view details -->
         <div class="signatures-module">
             <h2>Signatures</h2>
             <table>
+                <!-- Table Header: Column names for the signature table -->
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -193,6 +204,7 @@
                         <th>Details</th>
                     </tr>
                 </thead>
+                <!-- Table Body: Dynamically populated by JavaScript with signature rows -->
                 <tbody id="signaturesBody">
                     <!-- Rows inserted by JavaScript -->
                 </tbody>
@@ -203,20 +215,25 @@
     </div><!-- End .container -->
 
     <!-- ===================== BOOTSTRAP MODAL ===================== -->
+    <!-- Modal dialog that appears when user clicks "more »" on a signature -->
+    <!-- Displays full details of the signature including all conditional fields -->
     <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
+                <!-- Modal Header: Shows signer name and close button -->
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitle">Details</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <!-- Modal Body: Contains table with all signature details -->
                 <div class="modal-body">
                     <table class="modal-detail-table">
                         <tbody id="modalDetailTable">
-                            <!-- Populated by JavaScript -->
+                            <!-- Populated by JavaScript with signature details -->
                         </tbody>
                     </table>
                 </div>
+                <!-- Modal Footer: Close button -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
@@ -225,10 +242,10 @@
     </div>
     <!-- ===================== END MODAL ===================== -->
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap JS: Required for modal functionality -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Our JavaScript -->
+    <!-- Our Custom JavaScript: Contains all form and table interaction logic -->
     <script src="Petition2.js"></script>
 
 </body>

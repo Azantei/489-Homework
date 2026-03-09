@@ -1,21 +1,38 @@
+/* ==================================================================
+   Petition2.css
+   Camille Orego — CPTS 489 Web Development — Assignment 2
+   
+   This stylesheet provides all visual styling for the petition page:
+   - Layout and typography
+   - Navigation bar styling
+   - Form controls and validation styling
+   - Conditional section visibility and styling
+   - Signatures table with hover effects
+   - Bootstrap modal customization
+   ================================================================== */
+
+/* Global Reset: Remove default margins and padding, use border-box sizing */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body: Base font and background color for entire page */
 body {
     font-family: 'Helvetica', sans-serif;
     background-color: #F4F4F4;
 }
 
-/* Navigation Bar */
+/* ==================== Navigation Bar ==================== */
+/* Dark navigation bar at the top of the page */
 nav {
     background-color: #3A3A3A;
     padding: 15px 0;
     text-align: center;
 }
 
+/* Navigation links: White text with spacing between links */
 nav a {
     color: #FFFFFF;
     text-decoration: none;
@@ -23,11 +40,14 @@ nav a {
     font-size: 16px;
 }
 
+/* Navigation link hover effect: Underline on hover */
 nav a:hover {
     text-decoration: underline;
 }
+/* ==================== End Navigation Bar ==================== */
 
-/* Main Container */
+/* ==================== Main Container ==================== */
+/* Central white box that contains all page content */
 .container {
     max-width: 900px;
     margin: 50px auto;
@@ -36,8 +56,10 @@ nav a:hover {
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
+/* ==================== End Main Container ==================== */
 
-/* Header Styles */
+/* ==================== Header Styles ==================== */
+/* Main page heading (h1): Blue serif font, centered */
 h1 {
     font-family: 'Times New Roman', Times, serif;
     color: #1A3A8A;
@@ -48,6 +70,7 @@ h1 {
     letter-spacing: -0.02em;
 }
 
+/* Section heading (h2): Red serif font, centered */
 h2 {
     font-family: 'Times New Roman', Times, serif;
     color: #C41E3A;
@@ -56,8 +79,10 @@ h2 {
     font-weight: bold;
     letter-spacing: -0.02em;
 }
+/* ==================== End Header Styles ==================== */
 
-/* Content Section */
+/* ==================== Content Section ==================== */
+/* Container for petition text and image side-by-side */
 .content-wrapper {
     display: flex;
     gap: 30px;
@@ -65,6 +90,7 @@ h2 {
     align-items: flex-start;
 }
 
+/* Petition body text: Takes up 2/3 of the width, justified text */
 .petition-body {
     flex: 2;
     text-align: justify;
@@ -72,18 +98,22 @@ h2 {
     font-size: 15px;
 }
 
+/* Petition image container: Takes up 1/3 of the width, centered */
 .petition-image {
     flex: 1;
     text-align: center;
 }
 
+/* Petition image styling: Responsive image with rounded corners */
 .petition-image img {
     width: 100%;
     max-width: 250px;
     border-radius: 8px;
 }
+/* ==================== End Content Section ==================== */
 
-/* Signup Module */
+/* ==================== Signup Module ==================== */
+/* Form section where users sign the petition */
 .signup-module {
     margin-top: 40px;
 }
@@ -92,10 +122,12 @@ h2 {
     margin-bottom: 25px;
 }
 
+/* Form group: Container for each form field with spacing */
 .form-group {
     margin-bottom: 15px;
 }
 
+/* Form inputs: Text fields, email, select dropdowns, and textareas */
 input[type="text"],
 input[type="email"],
 select,
@@ -108,11 +140,13 @@ textarea {
     font-family: 'Helvetica', sans-serif;
 }
 
+/* Placeholder text styling: Gray color for input hints */
 input::placeholder,
 textarea::placeholder {
     color: #999999;
 }
 
+/* Select dropdown styling: Custom arrow icon and cursor */
 select {
     appearance: none;
     -webkit-appearance: none;
@@ -123,12 +157,15 @@ select {
     cursor: pointer;
 }
 
+/* Textarea: Allows vertical resizing with minimum height */
 textarea {
     resize: vertical;
     min-height: 80px;
 }
 
-/* Conditional Sub-sections */
+/* ==================== Conditional Sub-sections ==================== */
+/* These sections appear/hide based on selected signer type */
+/* Hidden by default, shown when .visible class is added via JavaScript */
 .conditional-section {
     display: none;
     border-left: 4px solid #AACCEE;
@@ -138,10 +175,12 @@ textarea {
     border-radius: 0 4px 4px 0;
 }
 
+/* Visible state: Shown when JavaScript adds this class */
 .conditional-section.visible {
     display: block;
 }
 
+/* Labels within conditional sections: Bold text for field names */
 .conditional-section label {
     display: block;
     font-weight: bold;
@@ -150,6 +189,7 @@ textarea {
     color: #333;
 }
 
+/* Inputs within conditional sections: White background to stand out */
 .conditional-section input[type="text"],
 .conditional-section select,
 .conditional-section textarea {
@@ -157,13 +197,16 @@ textarea {
     margin-bottom: 12px;
 }
 
+/* Remove bottom margin from last input in conditional section */
 .conditional-section input[type="text"]:last-child,
 .conditional-section select:last-child,
 .conditional-section textarea:last-child {
     margin-bottom: 0;
 }
+/* ==================== End Conditional Sub-sections ==================== */
 
-/* Error Message */
+/* ==================== Error Message ==================== */
+/* Validation error display, hidden by default */
 .error-message {
     display: none;
     color: #C41E3A;
@@ -171,11 +214,14 @@ textarea {
     margin-bottom: 10px;
 }
 
+/* Visible state: Shown when JavaScript adds this class */
 .error-message.visible {
     display: block;
 }
+/* ==================== End Error Message ==================== */
 
-/* Submit Button */
+/* ==================== Submit Button ==================== */
+/* Blue button to submit the petition form */
 .submit-button {
     width: 100%;
     padding: 15px;
@@ -188,11 +234,15 @@ textarea {
     margin-top: 10px;
 }
 
+/* Button hover effect: Darker blue on hover */
 .submit-button:hover {
     background-color: #0052CC;
 }
+/* ==================== End Submit Button ==================== */
+/* ==================== End Signup Module ==================== */
 
-/* Signatures Module */
+/* ==================== Signatures Module ==================== */
+/* Section displaying all petition signatures in a table */
 .signatures-module {
     margin-top: 40px;
 }
@@ -201,12 +251,14 @@ textarea {
     margin-bottom: 20px;
 }
 
+/* Table: Full-width table with collapsed borders */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
+/* Table header cells: White background with bold text */
 th {
     background-color: #FFFFFF;
     padding: 12px;
@@ -215,45 +267,57 @@ th {
     font-weight: bold;
 }
 
+/* Table data cells: Standard padding and border */
 td {
     padding: 12px;
     border: 1px solid #DDDDDD;
 }
 
+/* Row hover effect: Highlight row on mouse hover */
 tr:hover {
     background-color: #F9F9F9;
 }
 
+/* Odd rows: Light gray background for zebra striping */
 tbody tr:nth-child(odd) {
     background-color: #F9F9F9;
 }
 
+/* Even rows: White background for zebra striping */
 tbody tr:nth-child(even) {
     background-color: #FFFFFF;
 }
 
+/* "more »" link styling: Blue link that opens modal */
 .more-link {
     color: #0066FF;
     text-decoration: none;
     font-size: 14px;
 }
 
+/* Link hover effect: Underline on hover */
 .more-link:hover {
     text-decoration: underline;
 }
+/* ==================== End Signatures Module ==================== */
 
-/* Bootstrap Modal Overrides */
+/* ==================== Bootstrap Modal Overrides ==================== */
+/* Customizations for the Bootstrap modal dialog */
+
+/* Modal title: Serif font matching page h2 style but smaller */
 .modal-title {
     font-family: 'Times New Roman', Times, serif;
     font-size: 20px;
     color: #1A3A8A;
 }
 
+/* Modal detail table: Two-column table showing signature details */
 .modal-detail-table {
     width: 100%;
     border-collapse: collapse;
 }
 
+/* Modal table cells: Padding and subtle bottom border */
 .modal-detail-table td {
     padding: 10px 12px;
     border-bottom: 1px solid #EEEEEE;
@@ -261,17 +325,21 @@ tbody tr:nth-child(even) {
     vertical-align: top;
 }
 
+/* First column (labels): Bold text, fixed width, darker color */
 .modal-detail-table td:first-child {
     font-weight: bold;
     width: 40%;
     color: #333;
 }
 
+/* Second column (values): Italic text for data */
 .modal-detail-table td:last-child {
     font-style: italic;
     color: #222;
 }
 
+/* Last row: Remove bottom border for clean appearance */
 .modal-detail-table tr:last-child td {
     border-bottom: none;
 }
+/* ==================== End Bootstrap Modal Overrides ==================== */
