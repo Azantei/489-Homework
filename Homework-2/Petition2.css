@@ -166,6 +166,7 @@ textarea {
 /* ==================== Conditional Sub-sections ==================== */
 /* These sections appear/hide based on selected signer type */
 /* Hidden by default, shown when .visible class is added via JavaScript */
+/* Alternate to using element.style.display = 'block' to show and element.style.display='none' to hide */
 .conditional-section {
     display: none;
     border-left: 4px solid #AACCEE;
