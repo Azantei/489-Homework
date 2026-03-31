@@ -53,26 +53,29 @@
         <div class="signup-module">
             <h2>Sign the Petition</h2>
 
-            <form id="petitionForm">
+            <!-- method="POST" sends form data to the server -->
+            <!-- action="/" tells it to POST to the root route -->
+            <form id="petitionForm" method="POST" action="/">
 
                 <div class="form-group">
-                    <input type="text" id="nameInput" placeholder="Your Name">
+                    <!-- name attribute is how the server reads this field via req.body.name -->
+                    <input type="text" id="nameInput" name="name" placeholder="Your Name">
                 </div>
 
                 <div class="form-group">
-                    <input type="email" id="emailInput" placeholder="Your Email">
+                    <input type="email" id="emailInput" name="email" placeholder="Your Email">
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="cityInput" placeholder="City">
+                    <input type="text" id="cityInput" name="city" placeholder="City">
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="stateInput" placeholder="State (e.g., WA)" maxlength="2">
+                    <input type="text" id="stateInput" name="state" placeholder="State (e.g., WA)" maxlength="2">
                 </div>
 
                 <div class="form-group">
-                    <select id="signerType">
+                    <select id="signerType" name="signerType">
                         <option value="">-- I am a ... --</option>
                         <option value="Student">Student</option>
                         <option value="Faculty">Faculty / Staff</option>
@@ -85,7 +88,7 @@
                 <!-- Student Section -->
                 <div id="section-student" class="conditional-section">
                     <label for="studentLevel">Academic level:</label>
-                    <select id="studentLevel">
+                    <select id="studentLevel" name="studentLevel">
                         <option value="">-- Select --</option>
                         <option value="Freshman">Freshman</option>
                         <option value="Sophomore">Sophomore</option>
@@ -94,13 +97,13 @@
                         <option value="Graduate">Graduate</option>
                     </select>
                     <label for="studentMajor">Major (optional):</label>
-                    <input type="text" id="studentMajor" placeholder="e.g., Computer Science">
+                    <input type="text" id="studentMajor" name="studentMajor" placeholder="e.g., Computer Science">
                 </div>
 
                 <!-- Faculty/Staff Section -->
                 <div id="section-faculty" class="conditional-section">
                     <label for="facultyRole">Your role:</label>
-                    <select id="facultyRole">
+                    <select id="facultyRole" name="facultyRole">
                         <option value="">-- Select --</option>
                         <option value="Professor">Professor</option>
                         <option value="Instructor">Instructor</option>
@@ -109,13 +112,13 @@
                         <option value="Research">Research</option>
                     </select>
                     <label for="facultyDept">Department:</label>
-                    <input type="text" id="facultyDept" placeholder="e.g., School of EECS">
+                    <input type="text" id="facultyDept" name="facultyDept" placeholder="e.g., School of EECS">
                 </div>
 
                 <!-- Military/Veteran Section -->
                 <div id="section-military" class="conditional-section">
                     <label for="militaryBranch">Branch:</label>
-                    <select id="militaryBranch">
+                    <select id="militaryBranch" name="militaryBranch">
                         <option value="">-- Select --</option>
                         <option value="Army">Army</option>
                         <option value="Navy">Navy</option>
@@ -125,7 +128,7 @@
                         <option value="Space Force">Space Force</option>
                     </select>
                     <label for="militaryStatus">Status:</label>
-                    <select id="militaryStatus">
+                    <select id="militaryStatus" name="militaryStatus">
                         <option value="">-- Select --</option>
                         <option value="Active Duty">Active Duty</option>
                         <option value="Veteran">Veteran</option>
@@ -136,7 +139,7 @@
                 <!-- Industry Professional Section -->
                 <div id="section-industry" class="conditional-section">
                     <label for="industrySector">Your industry sector:</label>
-                    <select id="industrySector">
+                    <select id="industrySector" name="industrySector">
                         <option value="">-- Select --</option>
                         <option value="Technology">Technology</option>
                         <option value="Healthcare">Healthcare</option>
@@ -149,21 +152,28 @@
                         <option value="Other">Other</option>
                     </select>
                     <label for="industryCompany">Company name (optional):</label>
-                    <input type="text" id="industryCompany" placeholder="e.g., Microsoft">
+                    <input type="text" id="industryCompany" name="industryCompany" placeholder="e.g., Microsoft">
                 </div>
 
                 <!-- Other Section -->
                 <div id="section-other" class="conditional-section">
                     <label for="otherAffiliation">Please describe your affiliation:</label>
-                    <textarea id="otherAffiliation" placeholder="Describe your affiliation..."></textarea>
+                    <textarea id="otherAffiliation" name="otherAffiliation" placeholder="Describe your affiliation..."></textarea>
                 </div>
 
                 <div class="form-group">
-                    <textarea id="commentInput" placeholder="Leave a comment (optional)"></textarea>
+                    <textarea id="commentInput" name="comment" placeholder="Leave a comment (optional)"></textarea>
                 </div>
 
-                <!-- Error Message: Displayed when validation fails -->
-                <div id="formError" class="error-message"></div>
+                <!-- Error Message: Displayed when server-side validation fails -->
+                <!-- EJS prints the error here if the server sends one back -->
+                <% if (typeof errorMsg !== 'undefined' && errorMsg) { %>
+                    <div id="formError" class="error-message visible">
+                        <%= errorMsg %>
+                    </div>
+                <% } else { %>
+                    <div id="formError" class="error-message"></div>
+                <% } %>
 
                 <button type="submit" class="submit-button">Sign Petition</button>
 
@@ -187,6 +197,7 @@
                 <!-- The server passes the signatures array to this template -->
                 <!-- EJS loops over it and renders one row per signature -->
                 <tbody id="signaturesBody">
+                    <% /* Loop over every signature in the array passed from the server */ %>
                     <% signatures.forEach(function(sig) { %>
                     <tr data-sig='<%- JSON.stringify(sig) %>'>
                         <!--
@@ -194,14 +205,13 @@
                             The client-side JavaScript reads this attribute when "more »" is clicked
                             to populate the modal with the correct details.
                         -->
-
                         <!-- <%= %> outputs the value of a variable into the HTML -->
                         <td><%= sig.name %></td>
                         <td><%= sig.city %></td>
                         <td><%= sig.signerType %></td>
                         <td><a href="#" class="more-link">more »</a></td>
                     </tr>
-                    <% }) %>
+                    <% }) /* end forEach */ %>
                 </tbody>
             </table>
         </div>

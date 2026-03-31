@@ -1,18 +1,21 @@
 // ============================================================
 // Petition2.js
-// Camille Orego — CPTS 489 Web Development — Assignment 2
-// 
-// This script provides dynamic functionality for the petition form:
-// - Loads seed signature data on page load
-// - Shows/hides conditional form sections based on signer type
-// - Validates all form inputs before submission
-// - Dynamically adds new signatures to the table
-// - Opens Bootstrap modals to display full signature details
+// Camille Orego — CPTS 489 Web Development — Assignment 3
+// Builds on Assignment 2
+//
+// Changes from Assignment 2:
+// - Seed data and table rows are now rendered server-side via EJS
+// - Modal now reads signature data from data-sig attribute on each row
+// - Client-side validation still runs, but server also validates
+// - Form submission now goes to the server via POST
+// - addTableRow() is no longer called on page load
+//
+// Developed with assistance from Claude Sonnet 4.6 (Anthropic)
 // ============================================================
 
 // ------------------------------------------------------------------
-// Seed data: pre-populated signatures shown on page load
-// This array contains sample signatures to demonstrate the functionality
+// Seed data: kept here for reference but no longer used client-side.
+// The server now owns the seed data in server.js.
 // ------------------------------------------------------------------
 const seedSignatures = [
     {
@@ -55,8 +58,6 @@ const seedSignatures = [
 
 // ------------------------------------------------------------------
 // Build a display label for the signer type (shortened for table)
-// Takes the full signer type string and returns a shorter version
-// for display in the signatures table.
 // ------------------------------------------------------------------
 function getTypeLabel(signerType) {
     const labels = {
@@ -70,38 +71,35 @@ function getTypeLabel(signerType) {
 }
 
 // ------------------------------------------------------------------
-// Add a row to the signatures table for a given signature object
-// Creates a new table row with name, city, type, and a "more »" link.
-// The "more »" link triggers the modal to show full details.
-// Parameters:
-//   sig - signature object with name, email, city, state, etc.
+// Add a row to the signatures table for a given signature object.
+// This is still used after a successful client-side submission
+// but the server now handles the initial page load rows.
 // ------------------------------------------------------------------
 function addTableRow(sig) {
     const tbody = document.getElementById("signaturesBody");
     const tr = document.createElement("tr");
 
-    // Name cell: Displays the signer's name
+    // Store the full signature object on the row as a data attribute
+    // so the modal can read it when "more »" is clicked
+    tr.setAttribute("data-sig", JSON.stringify(sig));
+
     const tdName = document.createElement("td");
     tdName.textContent = sig.name;
     tr.appendChild(tdName);
 
-    // City cell: Displays the signer's city
     const tdCity = document.createElement("td");
     tdCity.textContent = sig.city;
     tr.appendChild(tdCity);
 
-    // Type cell: Displays the signer type (Student, Faculty, etc.)
     const tdType = document.createElement("td");
     tdType.textContent = getTypeLabel(sig.signerType);
     tr.appendChild(tdType);
 
-    // "more »" link cell: When clicked, opens modal with full details
     const tdMore = document.createElement("td");
     const link = document.createElement("a");
     link.href = "#";
     link.className = "more-link";
     link.textContent = "more »";
-    // Attach click event to open modal and prevent default link behavior
     link.addEventListener("click", function (e) {
         e.preventDefault();
         openModal(sig);
@@ -109,22 +107,15 @@ function addTableRow(sig) {
     tdMore.appendChild(link);
     tr.appendChild(tdMore);
 
-    // Add the completed row to the table body
     tbody.appendChild(tr);
 }
 
 // ------------------------------------------------------------------
 // Build modal content and show it for a given signature
-// Populates the Bootstrap modal with all signature details including
-// basic info, conditional fields, and optional comment.
-// Parameters:
-//   sig - signature object containing all signer information
 // ------------------------------------------------------------------
 function openModal(sig) {
-    // Set modal title to include the signer's name
     document.getElementById("modalTitle").textContent = "Details: " + sig.name;
 
-    // Build the detail rows: Start with basic information
     const rows = [
         ["Name", sig.name],
         ["Email", sig.email],
@@ -133,17 +124,14 @@ function openModal(sig) {
         ["Signer Type", sig.signerType]
     ];
 
-    // Add conditional fields (different for each signer type)
     for (const [label, value] of Object.entries(sig.conditionalFields)) {
         if (value) rows.push([label, value]);
     }
 
-    // Add comment if present (not all signatures have comments)
     if (sig.comment && sig.comment.trim() !== "") {
         rows.push(["Comment", sig.comment]);
     }
 
-    // Populate modal table with all detail rows
     const modalTable = document.getElementById("modalDetailTable");
     modalTable.innerHTML = "";
     rows.forEach(([label, value]) => {
@@ -157,7 +145,6 @@ function openModal(sig) {
         modalTable.appendChild(tr);
     });
 
-    // Show Bootstrap modal using Bootstrap's JavaScript API
     const modalEl = document.getElementById("detailModal");
     const modal = new bootstrap.Modal(modalEl);
     modal.show();
@@ -165,21 +152,14 @@ function openModal(sig) {
 
 // ------------------------------------------------------------------
 // Show/hide conditional sub-sections based on signer type selection
-// When the user selects a signer type from the dropdown, this function
-// hides all conditional sections and shows only the relevant one.
-// For example, selecting "Student" shows the student section with
-// academic level and major fields.
 // ------------------------------------------------------------------
 function handleSignerTypeChange() {
     const signerType = document.getElementById("signerType").value;
 
-    // Hide all sub-sections first by removing the "visible" class
     document.querySelectorAll(".conditional-section").forEach(section => {
         section.classList.remove("visible");
     });
 
-    // Show the relevant section by adding the "visible" class
-    // The CSS uses .conditional-section.visible { display: block; }
     if (signerType === "Student") {
         document.getElementById("section-student").classList.add("visible");
     } else if (signerType === "Faculty") {
@@ -194,11 +174,8 @@ function handleSignerTypeChange() {
 }
 
 // ------------------------------------------------------------------
-// Validate the form and return an error message or null if valid
-// Checks all required fields and returns a descriptive error message
-// if validation fails. Returns null if all validations pass.
-// This function is called before form submission.
-// Returns: error message string or null
+// Validate the form client-side and return an error message or null
+// The server also validates — this is just the first line of defense
 // ------------------------------------------------------------------
 function validateForm() {
     const name = document.getElementById("nameInput").value.trim();
@@ -207,12 +184,10 @@ function validateForm() {
     const state = document.getElementById("stateInput").value.trim();
     const signerType = document.getElementById("signerType").value;
 
-    // Name must be at least 5 characters
     if (name.length < 5) {
         return "Name must be at least 5 characters long.";
     }
 
-    // Basic email validation: has @, has a dot after @, non-empty parts on both sides
     const atIndex = email.indexOf("@");
     if (atIndex <= 0) {
         return "Please enter a valid email address.";
@@ -223,23 +198,18 @@ function validateForm() {
         return "Please enter a valid email address.";
     }
 
-    // City must not be empty
     if (city.length === 0) {
         return "City must not be empty.";
     }
 
-    // State must be exactly 2 characters (e.g., WA, OR, CA)
     if (state.length !== 2) {
         return "State must be exactly 2 characters (e.g., WA).";
     }
 
-    // Signer type must be selected
     if (!signerType) {
         return "Please fill in all required fields and select your signer type.";
     }
 
-    // Validate conditional dropdowns (required if visible)
-    // Each signer type has specific required fields
     if (signerType === "Student") {
         const level = document.getElementById("studentLevel").value;
         if (!level) return "Please select your Academic Level.";
@@ -256,50 +226,35 @@ function validateForm() {
         if (!sector) return "Please select your Industry Sector.";
     }
 
-    return null; // No errors, form is valid
+    return null;
 }
 
 // ------------------------------------------------------------------
-// Collect conditional fields from whichever sub-section is visible
-// Gathers the data from the conditional section based on signer type.
-// Returns an object with field labels and values (e.g., {"Academic Level": "Junior"}).
-// Only includes fields that have values; optional fields may be omitted.
-// Parameters:
-//   signerType - the selected signer type (Student, Faculty, etc.)
-// Returns: object with conditional field labels and values
+// Collect conditional fields from the visible sub-section
 // ------------------------------------------------------------------
 function collectConditionalFields(signerType) {
     const fields = {};
 
-    // Student: Collect academic level (required) and major (optional)
     if (signerType === "Student") {
         const level = document.getElementById("studentLevel");
         const major = document.getElementById("studentMajor");
         fields["Academic Level"] = level.options[level.selectedIndex].text;
         if (major.value.trim()) fields["Major"] = major.value.trim();
-
-    // Faculty: Collect role (required) and department (optional)
     } else if (signerType === "Faculty") {
         const role = document.getElementById("facultyRole");
         const dept = document.getElementById("facultyDept");
         fields["Role"] = role.options[role.selectedIndex].text;
         if (dept.value.trim()) fields["Department"] = dept.value.trim();
-
-    // Military: Collect branch and status (both required)
     } else if (signerType === "Military") {
         const branch = document.getElementById("militaryBranch");
         const status = document.getElementById("militaryStatus");
         fields["Branch"] = branch.options[branch.selectedIndex].text;
         fields["Status"] = status.options[status.selectedIndex].text;
-
-    // Industry: Collect sector (required) and company (optional)
     } else if (signerType === "Industry") {
         const sector = document.getElementById("industrySector");
         const company = document.getElementById("industryCompany");
         fields["Sector"] = sector.options[sector.selectedIndex].text;
         if (company.value.trim()) fields["Company"] = company.value.trim();
-
-    // Other: Collect free-form affiliation text (optional)
     } else if (signerType === "Other") {
         const affiliation = document.getElementById("otherAffiliation");
         if (affiliation.value.trim()) fields["Affiliation"] = affiliation.value.trim();
@@ -310,11 +265,8 @@ function collectConditionalFields(signerType) {
 
 // ------------------------------------------------------------------
 // Reset the form after successful submission
-// Clears all form fields and hides all conditional sections.
-// This prepares the form for the next signature entry.
 // ------------------------------------------------------------------
 function resetForm() {
-    // Clear all basic input fields
     document.getElementById("nameInput").value = "";
     document.getElementById("emailInput").value = "";
     document.getElementById("cityInput").value = "";
@@ -322,76 +274,61 @@ function resetForm() {
     document.getElementById("signerType").value = "";
     document.getElementById("commentInput").value = "";
 
-    // Reset all conditional dropdowns to their default empty state
     ["studentLevel", "facultyRole", "militaryBranch", "militaryStatus", "industrySector"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = "";
     });
-    // Reset all conditional text inputs
     ["studentMajor", "facultyDept", "industryCompany", "otherAffiliation"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = "";
     });
 
-    // Hide all conditional sections by removing the "visible" class
     document.querySelectorAll(".conditional-section").forEach(s => s.classList.remove("visible"));
 }
 
 // ------------------------------------------------------------------
 // Handle form submission
-// This function is called when the user clicks "Sign Petition".
-// It validates the form, displays errors if invalid, and if valid,
-// creates a signature object, adds it to the table, and resets the form.
-// Parameters:
-//   e - the form submit event
+// Client-side validation runs first. If it passes, the form submits
+// normally to the server via POST. The server then validates again.
 // ------------------------------------------------------------------
 function handleSubmit(e) {
-    e.preventDefault(); // Prevent default form submission (page reload)
-
     const errorEl = document.getElementById("formError");
     const errorMsg = validateForm();
 
-    // If validation fails, display the error message and stop
+    // If client-side validation fails, stop the form from submitting
     if (errorMsg) {
+        e.preventDefault();
         errorEl.textContent = errorMsg;
         errorEl.classList.add("visible");
         return;
     }
 
-    // Clear any previous error messages
+    // Clear any previous error messages and let the form submit to the server
     errorEl.classList.remove("visible");
     errorEl.textContent = "";
-
-    // Build signature object from form data
-    const signerType = document.getElementById("signerType").value;
-    const sig = {
-        name: document.getElementById("nameInput").value.trim(),
-        email: document.getElementById("emailInput").value.trim(),
-        city: document.getElementById("cityInput").value.trim(),
-        state: document.getElementById("stateInput").value.trim().toUpperCase(),
-        signerType: signerType,
-        conditionalFields: collectConditionalFields(signerType),
-        comment: document.getElementById("commentInput").value.trim()
-    };
-
-    // Add the new signature to the table and reset the form for next entry
-    addTableRow(sig);
-    resetForm();
+    // We do NOT call e.preventDefault() here - we let the POST go through
 }
 
 // ------------------------------------------------------------------
 // Initialize on page load
-// This function runs when the DOM is fully loaded and ready.
-// It sets up the page by loading seed signatures and attaching
-// event listeners for form interactions.
 // ------------------------------------------------------------------
 document.addEventListener("DOMContentLoaded", function () {
-    // Load seed data into table: Display pre-populated signatures
-    // seedSignatures.forEach(sig => addTableRow(sig));
-
-    // Attach signer type change listener: Shows/hides conditional sections
+    // Attach signer type change listener: shows/hides conditional sections
     document.getElementById("signerType").addEventListener("change", handleSignerTypeChange);
 
-    // Attach submit listener: Validates and processes form submission
+    // Attach submit listener for client-side validation
     document.getElementById("petitionForm").addEventListener("submit", handleSubmit);
+
+    // Attach modal click listeners to server-rendered table rows.
+    // Since rows are rendered by the server, we read the signature data
+    // from the data-sig attribute on each row instead of from a JS array.
+    document.querySelectorAll("#signaturesBody .more-link").forEach(function(link) {
+        link.addEventListener("click", function(e) {
+            e.preventDefault();
+            // Parse the signature object stored on the parent row by the server
+            const row = e.target.closest("tr");
+            const sig = JSON.parse(row.getAttribute("data-sig"));
+            openModal(sig);
+        });
+    });
 });
