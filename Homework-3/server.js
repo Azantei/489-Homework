@@ -1,11 +1,18 @@
 /*
- * Camille Orego
- * CPTS 489 - Web Development
- * Homework 3 - Express Petition App
+ * ============================================================
+ * server.js
+ * Camille Orego — CPTS 489 Web Development — Homework 3
  * Builds on Assignment 2
- * 
+ *
+ * Express server for the petition app:
+ * - Serves the petition page via GET /
+ * - Handles form submission via POST /
+ * - Validates form data server-side
+ * - Stores signatures in an in-memory array
+ *
  * Developed with assistance from Claude Sonnet 4.6 (Anthropic)
  * All prompts documented in AI Prompts PDF per assignment requirements
+ * ============================================================
  */
 
 const express = require('express');
@@ -17,11 +24,15 @@ app.set('view engine', 'ejs');
 // Serve static files from the public folder
 app.use(express.static('public'));
 
-// Parse form submissions - this populates req.body
+// Parse form submissions - populates req.body
 app.use(express.urlencoded({ extended: true }));
 
-// In-memory signatures array with seed data
-// This lives on the server for the lifetime of the server process
+// ============================================================
+// In-Memory Signatures Array
+// Signatures are stored here for the lifetime of the server.
+// No database is used — data resets when the server restarts.
+// Pre-populated with seed entries on startup.
+// ============================================================
 const signatures = [
     {
         name: "Alice Johnson",
@@ -43,10 +54,13 @@ const signatures = [
     }
 ];
 
-// ===================== SERVER-SIDE VALIDATION =====================
-// Mirrors the validation from Assignment 2 but runs on the server.
-// The server never trusts the client - we always validate here.
-// Returns an error message string if invalid, or null if valid.
+// ============================================================
+// Server-Side Validation
+// Mirrors the validation from Assignment 2 but runs on the
+// server. The server never trusts the client — we always
+// validate here regardless of client-side validation.
+// Returns an error message string if invalid, null if valid.
+// ============================================================
 function validateForm(body) {
     const { name, email, city, state, signerType } = body;
 
@@ -101,9 +115,12 @@ function validateForm(body) {
     return null; // No errors
 }
 
-// ===================== BUILD CONDITIONAL FIELDS =====================
-// Collects the conditional fields based on signer type
-// Returns an object with label/value pairs for the modal to display
+// ============================================================
+// Build Conditional Fields
+// Collects the conditional fields from the submitted form
+// based on signer type. Returns an object with label/value
+// pairs used to populate the modal details view.
+// ============================================================
 function buildConditionalFields(body) {
     const fields = {};
     const { signerType } = body;
@@ -127,22 +144,30 @@ function buildConditionalFields(body) {
     return fields;
 }
 
-// ===================== GET ROUTE =====================
-// Renders the petition page with the current signatures array
+// ============================================================
+// GET Route
+// Renders the petition page with the current signatures array.
+// EJS uses the signatures array to render the table server-side.
+// ============================================================
 app.get('/', (req, res) => {
     res.render('index', { signatures: signatures });
 });
 
-// ===================== POST ROUTE =====================
-// Handles form submission from the petition form
+// ============================================================
+// POST Route
+// Handles form submission from the petition form.
+// Validates server-side, re-renders with errors or redirects.
+// Uses the Post-Redirect-Get pattern on success to prevent
+// duplicate submissions on page refresh.
+// ============================================================
 app.post('/', (req, res) => {
-    // req.body contains all the submitted form fields
-    // thanks to express.urlencoded middleware above
+    // req.body contains all submitted form fields
+    // populated by express.urlencoded middleware
     const errorMsg = validateForm(req.body);
 
     if (errorMsg) {
-        // Validation failed: re-render the page with the error message
-        // and the previously entered values so the user doesn't retype everything
+        // Validation failed: re-render with error and pre-filled form data
+        // so the user does not have to retype everything
         res.render('index', {
             signatures: signatures,
             errorMsg: errorMsg,
@@ -151,7 +176,7 @@ app.post('/', (req, res) => {
         return;
     }
 
-    // Validation passed: build the signature object and add it to the array
+    // Validation passed: build and store the new signature
     const newSig = {
         name: req.body.name.trim(),
         email: req.body.email.trim(),
@@ -165,11 +190,14 @@ app.post('/', (req, res) => {
     // Push the new signature into the in-memory array
     signatures.push(newSig);
 
-    // Post-Redirect-Get pattern: redirect to GET / so refreshing doesn't resubmit
+    // Post-Redirect-Get: redirect to GET / so refreshing the page
+    // does not resubmit the form
     res.redirect('/');
 });
 
-// Start the server
+// ============================================================
+// Start Server
+// ============================================================
 app.listen(3000, () => {
     console.log('Server running on http://localhost:3000');
 });

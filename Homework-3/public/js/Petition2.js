@@ -1,6 +1,6 @@
 // ============================================================
 // Petition2.js
-// Camille Orego — CPTS 489 Web Development — Assignment 3
+// Camille Orego — CPTS 489 Web Development — Homework 3
 // Builds on Assignment 2
 //
 // Changes from Assignment 2:
@@ -11,12 +11,14 @@
 // - addTableRow() is no longer called on page load
 //
 // Developed with assistance from Claude Sonnet 4.6 (Anthropic)
+// All prompts documented in AI Prompts PDF per assignment requirements
 // ============================================================
 
-// ------------------------------------------------------------------
-// Seed data: kept here for reference but no longer used client-side.
+// ============================================================
+// Seed Data
+// Kept here for reference but no longer used client-side.
 // The server now owns the seed data in server.js.
-// ------------------------------------------------------------------
+// ============================================================
 const seedSignatures = [
     {
         name: "Alice Johnson",
@@ -56,9 +58,11 @@ const seedSignatures = [
     }
 ];
 
-// ------------------------------------------------------------------
-// Build a display label for the signer type (shortened for table)
-// ------------------------------------------------------------------
+// ============================================================
+// getTypeLabel
+// Builds a display label for the signer type.
+// Used when adding rows to the table client-side.
+// ============================================================
 function getTypeLabel(signerType) {
     const labels = {
         "Student": "Student",
@@ -70,11 +74,12 @@ function getTypeLabel(signerType) {
     return labels[signerType] || signerType;
 }
 
-// ------------------------------------------------------------------
-// Add a row to the signatures table for a given signature object.
-// This is still used after a successful client-side submission
-// but the server now handles the initial page load rows.
-// ------------------------------------------------------------------
+// ============================================================
+// addTableRow
+// Adds a row to the signatures table for a given signature.
+// Still used after successful client-side form submission.
+// Server handles the initial page load rows via EJS.
+// ============================================================
 function addTableRow(sig) {
     const tbody = document.getElementById("signaturesBody");
     const tr = document.createElement("tr");
@@ -110,9 +115,12 @@ function addTableRow(sig) {
     tbody.appendChild(tr);
 }
 
-// ------------------------------------------------------------------
-// Build modal content and show it for a given signature
-// ------------------------------------------------------------------
+// ============================================================
+// openModal
+// Builds and displays the Bootstrap modal for a given signature.
+// Populates the modal with all signature details including
+// basic info, conditional fields, and optional comment.
+// ============================================================
 function openModal(sig) {
     document.getElementById("modalTitle").textContent = "Details: " + sig.name;
 
@@ -124,10 +132,12 @@ function openModal(sig) {
         ["Signer Type", sig.signerType]
     ];
 
+    // Add conditional fields (different for each signer type)
     for (const [label, value] of Object.entries(sig.conditionalFields)) {
         if (value) rows.push([label, value]);
     }
 
+    // Add comment if present
     if (sig.comment && sig.comment.trim() !== "") {
         rows.push(["Comment", sig.comment]);
     }
@@ -150,16 +160,20 @@ function openModal(sig) {
     modal.show();
 }
 
-// ------------------------------------------------------------------
-// Show/hide conditional sub-sections based on signer type selection
-// ------------------------------------------------------------------
+// ============================================================
+// handleSignerTypeChange
+// Shows/hides conditional sub-sections based on signer type.
+// Triggered when the user changes the signer type dropdown.
+// ============================================================
 function handleSignerTypeChange() {
     const signerType = document.getElementById("signerType").value;
 
+    // Hide all sub-sections first
     document.querySelectorAll(".conditional-section").forEach(section => {
         section.classList.remove("visible");
     });
 
+    // Show only the relevant section
     if (signerType === "Student") {
         document.getElementById("section-student").classList.add("visible");
     } else if (signerType === "Faculty") {
@@ -173,10 +187,12 @@ function handleSignerTypeChange() {
     }
 }
 
-// ------------------------------------------------------------------
-// Validate the form client-side and return an error message or null
-// The server also validates — this is just the first line of defense
-// ------------------------------------------------------------------
+// ============================================================
+// validateForm
+// Validates the form client-side and returns an error message
+// or null if valid. The server also validates independently —
+// this is just the first line of defense.
+// ============================================================
 function validateForm() {
     const name = document.getElementById("nameInput").value.trim();
     const email = document.getElementById("emailInput").value.trim();
@@ -229,9 +245,11 @@ function validateForm() {
     return null;
 }
 
-// ------------------------------------------------------------------
-// Collect conditional fields from the visible sub-section
-// ------------------------------------------------------------------
+// ============================================================
+// collectConditionalFields
+// Collects conditional field values from the visible sub-section.
+// Returns an object with label/value pairs for the signature.
+// ============================================================
 function collectConditionalFields(signerType) {
     const fields = {};
 
@@ -263,9 +281,11 @@ function collectConditionalFields(signerType) {
     return fields;
 }
 
-// ------------------------------------------------------------------
-// Reset the form after successful submission
-// ------------------------------------------------------------------
+// ============================================================
+// resetForm
+// Clears all form fields and hides all conditional sections.
+// Called after successful client-side submission.
+// ============================================================
 function resetForm() {
     document.getElementById("nameInput").value = "";
     document.getElementById("emailInput").value = "";
@@ -286,16 +306,17 @@ function resetForm() {
     document.querySelectorAll(".conditional-section").forEach(s => s.classList.remove("visible"));
 }
 
-// ------------------------------------------------------------------
-// Handle form submission
-// Client-side validation runs first. If it passes, the form submits
-// normally to the server via POST. The server then validates again.
-// ------------------------------------------------------------------
+// ============================================================
+// handleSubmit
+// Handles form submission. Client-side validation runs first.
+// If it passes, the form submits normally to the server via POST.
+// The server then validates again independently.
+// ============================================================
 function handleSubmit(e) {
     const errorEl = document.getElementById("formError");
     const errorMsg = validateForm();
 
-    // If client-side validation fails, stop the form from submitting
+    // If client-side validation fails, block the submission
     if (errorMsg) {
         e.preventDefault();
         errorEl.textContent = errorMsg;
@@ -303,15 +324,16 @@ function handleSubmit(e) {
         return;
     }
 
-    // Clear any previous error messages and let the form submit to the server
+    // Clear any previous error messages and let the POST go through
     errorEl.classList.remove("visible");
     errorEl.textContent = "";
-    // We do NOT call e.preventDefault() here - we let the POST go through
 }
 
-// ------------------------------------------------------------------
-// Initialize on page load
-// ------------------------------------------------------------------
+// ============================================================
+// DOMContentLoaded — Page Initialization
+// Runs when the DOM is fully loaded. Attaches all event
+// listeners for form interactions and modal triggers.
+// ============================================================
 document.addEventListener("DOMContentLoaded", function () {
     // Attach signer type change listener: shows/hides conditional sections
     document.getElementById("signerType").addEventListener("change", handleSignerTypeChange);

@@ -1,11 +1,22 @@
 <!-- 
- Camille Orego
- CPTS 489 - Web Development
- Homework 3 - Express Petition App
+ ==============================================================
+ index.ejs
+ Camille Orego — CPTS 489 Web Development — Homework 3
  Builds on Assignment 2
- 
- Converted from static HTML to EJS template for server-side rendering.
+
+ EJS template for the petition page. Renders server-side using
+ data passed from the Express GET and POST routes in server.js.
+
+ Changes from Assignment 2:
+ - Converted from static HTML to EJS template
+ - Signatures table rendered server-side via EJS loop
+ - Form uses method="POST" action="/" to submit to server
+ - Error messages and form pre-fill handled via EJS variables
+ - name attributes added to all form inputs for req.body parsing
+
  Developed with assistance from Claude Sonnet 4.6 (Anthropic)
+ All prompts documented in AI Prompts PDF per assignment requirements
+ ==============================================================
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -33,6 +44,10 @@
 
         <h1>Move CPTS 489 to Afternoon in Winter!</h1>
 
+        <!-- ============================================================ -->
+        <!-- Petition Content                                             -->
+        <!-- Main petition text and image displayed side by side.        -->
+        <!-- ============================================================ -->
         <div class="content-wrapper">
             <div class="petition-body">
                 The image you see on the right is a representation of our professor every morning, right before his 
@@ -48,17 +63,22 @@
                 <img src="/images/s-l400-2.jpg" alt="Jack Nicholson in 'The Shining'">
             </div>
         </div>
+        <!-- ============================================================ -->
+        <!-- End Petition Content                                         -->
+        <!-- ============================================================ -->
 
-        <!-- ===================== SIGN THE PETITION FORM ===================== -->
+        <!-- ============================================================ -->
+        <!-- Sign The Petition Form                                       -->
+        <!-- method="POST" sends form data to the server.                -->
+        <!-- action="/" tells it to POST to the root route.              -->
+        <!-- name attributes on inputs let the server read via req.body. -->
+        <!-- ============================================================ -->
         <div class="signup-module">
             <h2>Sign the Petition</h2>
 
-            <!-- method="POST" sends form data to the server -->
-            <!-- action="/" tells it to POST to the root route -->
             <form id="petitionForm" method="POST" action="/">
 
                 <div class="form-group">
-                    <!-- name attribute is how the server reads this field via req.body.name -->
                     <input type="text" id="nameInput" name="name" placeholder="Your Name">
                 </div>
 
@@ -84,6 +104,12 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
+
+                <!-- ============================================================ -->
+                <!-- Conditional Sections                                         -->
+                <!-- Shown/hidden by client-side JS based on signer type.        -->
+                <!-- Each section collects extra info relevant to the signer.    -->
+                <!-- ============================================================ -->
 
                 <!-- Student Section -->
                 <div id="section-student" class="conditional-section">
@@ -161,12 +187,19 @@
                     <textarea id="otherAffiliation" name="otherAffiliation" placeholder="Describe your affiliation..."></textarea>
                 </div>
 
+                <!-- ============================================================ -->
+                <!-- End Conditional Sections                                     -->
+                <!-- ============================================================ -->
+
                 <div class="form-group">
                     <textarea id="commentInput" name="comment" placeholder="Leave a comment (optional)"></textarea>
                 </div>
 
-                <!-- Error Message: Displayed when server-side validation fails -->
-                <!-- EJS prints the error here if the server sends one back -->
+                <!-- ============================================================ -->
+                <!-- Server-Side Error Message                                    -->
+                <!-- EJS checks if the server sent back an error and renders it. -->
+                <!-- The visible class makes the error message appear.           -->
+                <!-- ============================================================ -->
                 <% if (typeof errorMsg !== 'undefined' && errorMsg) { %>
                     <div id="formError" class="error-message visible">
                         <%= errorMsg %>
@@ -174,14 +207,25 @@
                 <% } else { %>
                     <div id="formError" class="error-message"></div>
                 <% } %>
+                <!-- ============================================================ -->
+                <!-- End Server-Side Error Message                                -->
+                <!-- ============================================================ -->
 
                 <button type="submit" class="submit-button">Sign Petition</button>
 
             </form>
         </div>
-        <!-- ===================== END FORM ===================== -->
+        <!-- ============================================================ -->
+        <!-- End Sign The Petition Form                                   -->
+        <!-- ============================================================ -->
 
-        <!-- ===================== SIGNATURES TABLE ===================== -->
+        <!-- ============================================================ -->
+        <!-- Signatures Table                                             -->
+        <!-- The server passes the signatures array to this template.    -->
+        <!-- EJS loops over it and renders one row per signature.        -->
+        <!-- Each row stores the full signature as a data-sig attribute  -->
+        <!-- so the modal can read it when "more »" is clicked.          -->
+        <!-- ============================================================ -->
         <div class="signatures-module">
             <h2>Signatures</h2>
             <table>
@@ -193,33 +237,29 @@
                         <th>Details</th>
                     </tr>
                 </thead>
-                <!-- Table body rendered server-side using EJS -->
-                <!-- The server passes the signatures array to this template -->
-                <!-- EJS loops over it and renders one row per signature -->
                 <tbody id="signaturesBody">
-                    <% /* Loop over every signature in the array passed from the server */ %>
                     <% signatures.forEach(function(sig) { %>
                     <tr data-sig='<%- JSON.stringify(sig) %>'>
-                        <!--
-                            data-sig stores the full signature object as JSON on the row element.
-                            The client-side JavaScript reads this attribute when "more »" is clicked
-                            to populate the modal with the correct details.
-                        -->
-                        <!-- <%= %> outputs the value of a variable into the HTML -->
                         <td><%= sig.name %></td>
                         <td><%= sig.city %></td>
                         <td><%= sig.signerType %></td>
                         <td><a href="#" class="more-link">more »</a></td>
                     </tr>
-                    <% }) /* end forEach */ %>
+                    <% }) %>
                 </tbody>
             </table>
         </div>
-        <!-- ===================== END SIGNATURES TABLE ===================== -->
+        <!-- ============================================================ -->
+        <!-- End Signatures Table                                         -->
+        <!-- ============================================================ -->
 
     </div><!-- End .container -->
 
-    <!-- ===================== BOOTSTRAP MODAL ===================== -->
+    <!-- ============================================================ -->
+    <!-- Bootstrap Modal                                              -->
+    <!-- Appears when user clicks "more »" on a signature row.       -->
+    <!-- Populated by client-side JS reading the data-sig attribute. -->
+    <!-- ============================================================ -->
     <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -239,7 +279,9 @@
             </div>
         </div>
     </div>
-    <!-- ===================== END MODAL ===================== -->
+    <!-- ============================================================ -->
+    <!-- End Bootstrap Modal                                          -->
+    <!-- ============================================================ -->
 
     <!-- Bootstrap JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
