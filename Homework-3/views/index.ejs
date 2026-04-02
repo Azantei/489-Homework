@@ -78,20 +78,30 @@
 
             <form id="petitionForm" method="POST" action="/">
 
+                <!-- ============================================================ -->
+                <!-- Basic Fields                                                  -->
+                <!-- value attributes use formData to re-fill fields after a      -->
+                <!-- validation failure so the user doesn't lose their input.     -->
+                <!-- ============================================================ -->
+
                 <div class="form-group">
-                    <input type="text" id="nameInput" name="name" placeholder="Your Name">
+                    <input type="text" id="nameInput" name="name" placeholder="Your Name"
+                    value="<%= typeof formData !== 'undefined' && formData.name ? formData.name : '' %>">
                 </div>
 
                 <div class="form-group">
-                    <input type="email" id="emailInput" name="email" placeholder="Your Email">
+                    <input type="email" id="emailInput" name="email" placeholder="Your Email"
+                    value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>">
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="cityInput" name="city" placeholder="City">
+                    <input type="text" id="cityInput" name="city" placeholder="City"
+                    value="<%= typeof formData !== 'undefined' && formData.city ? formData.city : '' %>">
                 </div>
 
                 <div class="form-group">
-                    <input type="text" id="stateInput" name="state" placeholder="State (e.g., WA)" maxlength="2">
+                    <input type="text" id="stateInput" name="state" placeholder="State (e.g., WA)" maxlength="2"
+                    value="<%= typeof formData !== 'undefined' && formData.state ? formData.state : '' %>">
                 </div>
 
                 <div class="form-group">
@@ -104,6 +114,10 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
+
+                <!-- ============================================================ -->
+                <!-- End Basic Fields                                             -->
+                <!-- ============================================================ -->
 
                 <!-- ============================================================ -->
                 <!-- Conditional Sections                                         -->
@@ -123,7 +137,8 @@
                         <option value="Graduate">Graduate</option>
                     </select>
                     <label for="studentMajor">Major (optional):</label>
-                    <input type="text" id="studentMajor" name="studentMajor" placeholder="e.g., Computer Science">
+                    <input type="text" id="studentMajor" name="studentMajor" placeholder="e.g., Computer Science"
+                    value="<%= typeof formData !== 'undefined' && formData.studentMajor ? formData.studentMajor : '' %>">
                 </div>
 
                 <!-- Faculty/Staff Section -->
@@ -138,7 +153,8 @@
                         <option value="Research">Research</option>
                     </select>
                     <label for="facultyDept">Department:</label>
-                    <input type="text" id="facultyDept" name="facultyDept" placeholder="e.g., School of EECS">
+                    <input type="text" id="facultyDept" name="facultyDept" placeholder="e.g., School of EECS"
+                    value="<%= typeof formData !== 'undefined' && formData.facultyDept ? formData.facultyDept : '' %>">
                 </div>
 
                 <!-- Military/Veteran Section -->
@@ -178,13 +194,14 @@
                         <option value="Other">Other</option>
                     </select>
                     <label for="industryCompany">Company name (optional):</label>
-                    <input type="text" id="industryCompany" name="industryCompany" placeholder="e.g., Microsoft">
+                    <input type="text" id="industryCompany" name="industryCompany" placeholder="e.g., Microsoft"
+                    value="<%= typeof formData !== 'undefined' && formData.industryCompany ? formData.industryCompany : '' %>">
                 </div>
 
                 <!-- Other Section -->
                 <div id="section-other" class="conditional-section">
                     <label for="otherAffiliation">Please describe your affiliation:</label>
-                    <textarea id="otherAffiliation" name="otherAffiliation" placeholder="Describe your affiliation..."></textarea>
+                    <textarea id="otherAffiliation" name="otherAffiliation" placeholder="Describe your affiliation..."><%= typeof formData !== 'undefined' && formData.otherAffiliation ? formData.otherAffiliation : '' %></textarea>
                 </div>
 
                 <!-- ============================================================ -->
@@ -192,7 +209,7 @@
                 <!-- ============================================================ -->
 
                 <div class="form-group">
-                    <textarea id="commentInput" name="comment" placeholder="Leave a comment (optional)"></textarea>
+                    <textarea id="commentInput" name="comment" placeholder="Leave a comment (optional)"><%= typeof formData !== 'undefined' && formData.comment ? formData.comment : '' %></textarea>
                 </div>
 
                 <!-- ============================================================ -->
