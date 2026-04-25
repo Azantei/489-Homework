@@ -1,71 +1,128 @@
 import { useState } from 'react';
 
 export default function PetitionForm({ onSignatureAdded }) {
-  const [fields, setFields] = useState({
-    name: '', email: '', city: '', state: '', signerType: '',
-    studentLevel: '', studentMajor: '',
-    facultyRole: '', facultyDept: '',
-    militaryBranch: '', militaryStatus: '',
-    industrySector: '', industryCompany: '',
-    otherAffiliation: '',
-    comment: '',
-  });
-  const [error, setError] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [city, setCity] = useState('');
+  const [state, setState] = useState('');
+  const [signerType, setSignerType] = useState('');
+  const [studentLevel, setStudentLevel] = useState('');
+  const [studentMajor, setStudentMajor] = useState('');
+  const [facultyRole, setFacultyRole] = useState('');
+  const [facultyDept, setFacultyDept] = useState('');
+  const [militaryBranch, setMilitaryBranch] = useState('');
+  const [militaryStatus, setMilitaryStatus] = useState('');
+  const [industrySector, setIndustrySector] = useState('');
+  const [industryCompany, setIndustryCompany] = useState('');
+  const [otherAffiliation, setOtherAffiliation] = useState('');
+  const [comment, setComment] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFields(prev => ({ ...prev, [name]: value }));
+  function resetForm() {
+    setName('');
+    setEmail('');
+    setCity('');
+    setState('');
+    setSignerType('');
+    setStudentLevel('');
+    setStudentMajor('');
+    setFacultyRole('');
+    setFacultyDept('');
+    setMilitaryBranch('');
+    setMilitaryStatus('');
+    setIndustrySector('');
+    setIndustryCompany('');
+    setOtherAffiliation('');
+    setComment('');
+    setErrorMsg('');
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setError('');
+    setErrorMsg('');
     try {
       const res = await fetch('http://localhost:4000/api/signatures', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(fields),
+        body: JSON.stringify({
+          name, email, city, state, signerType,
+          studentLevel, studentMajor,
+          facultyRole, facultyDept,
+          militaryBranch, militaryStatus,
+          industrySector, industryCompany,
+          otherAffiliation,
+          comment,
+        }),
       });
       const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || 'Submission failed.');
+      if (res.status === 400) {
+        setErrorMsg(data.error || 'Submission failed.');
         return;
       }
       onSignatureAdded(data);
-      setFields({
-        name: '', email: '', city: '', state: '', signerType: '',
-        studentLevel: '', studentMajor: '',
-        facultyRole: '', facultyDept: '',
-        militaryBranch: '', militaryStatus: '',
-        industrySector: '', industryCompany: '',
-        otherAffiliation: '',
-        comment: '',
-      });
+      resetForm();
     } catch {
-      setError('Could not reach the server.');
+      setErrorMsg('Could not reach the server.');
     }
   }
-
-  const { signerType } = fields;
 
   return (
     <div className="signup-module">
       <h2>Sign the Petition</h2>
-      <form onSubmit={handleSubmit}>
+      <form id="petitionForm" onSubmit={handleSubmit}>
+
         <div className="form-group">
-          <input type="text" name="name" placeholder="Your Name" value={fields.name} onChange={handleChange} />
+          <input
+            type="text"
+            id="nameInput"
+            name="name"
+            placeholder="Your Name"
+            value={name}
+            onChange={e => setName(e.target.value)}
+          />
         </div>
+
         <div className="form-group">
-          <input type="email" name="email" placeholder="Your Email" value={fields.email} onChange={handleChange} />
+          <input
+            type="email"
+            id="emailInput"
+            name="email"
+            placeholder="Your Email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+          />
         </div>
+
         <div className="form-group">
-          <input type="text" name="city" placeholder="City" value={fields.city} onChange={handleChange} />
+          <input
+            type="text"
+            id="cityInput"
+            name="city"
+            placeholder="City"
+            value={city}
+            onChange={e => setCity(e.target.value)}
+          />
         </div>
+
         <div className="form-group">
-          <input type="text" name="state" placeholder="State (e.g., WA)" maxLength={2} value={fields.state} onChange={handleChange} />
+          <input
+            type="text"
+            id="stateInput"
+            name="state"
+            placeholder="State (e.g., WA)"
+            maxLength={2}
+            value={state}
+            onChange={e => setState(e.target.value)}
+          />
         </div>
+
         <div className="form-group">
-          <select name="signerType" value={fields.signerType} onChange={handleChange}>
+          <select
+            id="signerType"
+            name="signerType"
+            value={signerType}
+            onChange={e => setSignerType(e.target.value)}
+          >
             <option value="">-- I am a ... --</option>
             <option value="Student">Student</option>
             <option value="Faculty">Faculty / Staff</option>
@@ -76,100 +133,151 @@ export default function PetitionForm({ onSignatureAdded }) {
         </div>
 
         {signerType === 'Student' && (
-          <div className="conditional-section">
-            <label>Academic level:
-              <select name="studentLevel" value={fields.studentLevel} onChange={handleChange}>
-                <option value="">-- Select --</option>
-                <option value="Freshman">Freshman</option>
-                <option value="Sophomore">Sophomore</option>
-                <option value="Junior">Junior</option>
-                <option value="Senior">Senior</option>
-                <option value="Graduate">Graduate</option>
-              </select>
-            </label>
-            <label>Major (optional):
-              <input type="text" name="studentMajor" placeholder="e.g., Computer Science" value={fields.studentMajor} onChange={handleChange} />
-            </label>
+          <div id="section-student" className="conditional-section visible">
+            <label htmlFor="studentLevel">Academic level:</label>
+            <select
+              id="studentLevel"
+              name="studentLevel"
+              value={studentLevel}
+              onChange={e => setStudentLevel(e.target.value)}
+            >
+              <option value="">-- Select --</option>
+              <option value="Freshman">Freshman</option>
+              <option value="Sophomore">Sophomore</option>
+              <option value="Junior">Junior</option>
+              <option value="Senior">Senior</option>
+              <option value="Graduate">Graduate</option>
+            </select>
+            <label htmlFor="studentMajor">Major (optional):</label>
+            <input
+              type="text"
+              id="studentMajor"
+              name="studentMajor"
+              placeholder="e.g., Computer Science"
+              value={studentMajor}
+              onChange={e => setStudentMajor(e.target.value)}
+            />
           </div>
         )}
 
         {signerType === 'Faculty' && (
-          <div className="conditional-section">
-            <label>Your role:
-              <select name="facultyRole" value={fields.facultyRole} onChange={handleChange}>
-                <option value="">-- Select --</option>
-                <option value="Professor">Professor</option>
-                <option value="Instructor">Instructor</option>
-                <option value="TA">TA</option>
-                <option value="Administrative">Administrative</option>
-                <option value="Research">Research</option>
-              </select>
-            </label>
-            <label>Department:
-              <input type="text" name="facultyDept" placeholder="e.g., School of EECS" value={fields.facultyDept} onChange={handleChange} />
-            </label>
+          <div id="section-faculty" className="conditional-section visible">
+            <label htmlFor="facultyRole">Your role:</label>
+            <select
+              id="facultyRole"
+              name="facultyRole"
+              value={facultyRole}
+              onChange={e => setFacultyRole(e.target.value)}
+            >
+              <option value="">-- Select --</option>
+              <option value="Professor">Professor</option>
+              <option value="Instructor">Instructor</option>
+              <option value="TA">TA</option>
+              <option value="Administrative">Administrative</option>
+              <option value="Research">Research</option>
+            </select>
+            <label htmlFor="facultyDept">Department:</label>
+            <input
+              type="text"
+              id="facultyDept"
+              name="facultyDept"
+              placeholder="e.g., School of EECS"
+              value={facultyDept}
+              onChange={e => setFacultyDept(e.target.value)}
+            />
           </div>
         )}
 
         {signerType === 'Military' && (
-          <div className="conditional-section">
-            <label>Branch:
-              <select name="militaryBranch" value={fields.militaryBranch} onChange={handleChange}>
-                <option value="">-- Select --</option>
-                <option value="Army">Army</option>
-                <option value="Navy">Navy</option>
-                <option value="Air Force">Air Force</option>
-                <option value="Marine Corps">Marine Corps</option>
-                <option value="Coast Guard">Coast Guard</option>
-                <option value="Space Force">Space Force</option>
-              </select>
-            </label>
-            <label>Status:
-              <select name="militaryStatus" value={fields.militaryStatus} onChange={handleChange}>
-                <option value="">-- Select --</option>
-                <option value="Active Duty">Active Duty</option>
-                <option value="Veteran">Veteran</option>
-                <option value="Reservist">Reservist</option>
-              </select>
-            </label>
+          <div id="section-military" className="conditional-section visible">
+            <label htmlFor="militaryBranch">Branch:</label>
+            <select
+              id="militaryBranch"
+              name="militaryBranch"
+              value={militaryBranch}
+              onChange={e => setMilitaryBranch(e.target.value)}
+            >
+              <option value="">-- Select --</option>
+              <option value="Army">Army</option>
+              <option value="Navy">Navy</option>
+              <option value="Air Force">Air Force</option>
+              <option value="Marine Corps">Marine Corps</option>
+              <option value="Coast Guard">Coast Guard</option>
+              <option value="Space Force">Space Force</option>
+            </select>
+            <label htmlFor="militaryStatus">Status:</label>
+            <select
+              id="militaryStatus"
+              name="militaryStatus"
+              value={militaryStatus}
+              onChange={e => setMilitaryStatus(e.target.value)}
+            >
+              <option value="">-- Select --</option>
+              <option value="Active Duty">Active Duty</option>
+              <option value="Veteran">Veteran</option>
+              <option value="Reservist">Reservist</option>
+            </select>
           </div>
         )}
 
         {signerType === 'Industry' && (
-          <div className="conditional-section">
-            <label>Your industry sector:
-              <select name="industrySector" value={fields.industrySector} onChange={handleChange}>
-                <option value="">-- Select --</option>
-                <option value="Technology">Technology</option>
-                <option value="Healthcare">Healthcare</option>
-                <option value="Finance">Finance</option>
-                <option value="Education">Education</option>
-                <option value="Manufacturing">Manufacturing</option>
-                <option value="Retail">Retail</option>
-                <option value="Government">Government</option>
-                <option value="Non-profit">Non-profit</option>
-                <option value="Other">Other</option>
-              </select>
-            </label>
-            <label>Company name (optional):
-              <input type="text" name="industryCompany" placeholder="e.g., Microsoft" value={fields.industryCompany} onChange={handleChange} />
-            </label>
+          <div id="section-industry" className="conditional-section visible">
+            <label htmlFor="industrySector">Your industry sector:</label>
+            <select
+              id="industrySector"
+              name="industrySector"
+              value={industrySector}
+              onChange={e => setIndustrySector(e.target.value)}
+            >
+              <option value="">-- Select --</option>
+              <option value="Technology">Technology</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Finance">Finance</option>
+              <option value="Education">Education</option>
+              <option value="Manufacturing">Manufacturing</option>
+              <option value="Retail">Retail</option>
+              <option value="Government">Government</option>
+              <option value="Non-profit">Non-profit</option>
+              <option value="Other">Other</option>
+            </select>
+            <label htmlFor="industryCompany">Company name (optional):</label>
+            <input
+              type="text"
+              id="industryCompany"
+              name="industryCompany"
+              placeholder="e.g., Microsoft"
+              value={industryCompany}
+              onChange={e => setIndustryCompany(e.target.value)}
+            />
           </div>
         )}
 
         {signerType === 'Other' && (
-          <div className="conditional-section">
-            <label>Please describe your affiliation:
-              <textarea name="otherAffiliation" placeholder="Describe your affiliation..." value={fields.otherAffiliation} onChange={handleChange} />
-            </label>
+          <div id="section-other" className="conditional-section visible">
+            <label htmlFor="otherAffiliation">Please describe your affiliation:</label>
+            <textarea
+              id="otherAffiliation"
+              name="otherAffiliation"
+              placeholder="Describe your affiliation..."
+              value={otherAffiliation}
+              onChange={e => setOtherAffiliation(e.target.value)}
+            />
           </div>
         )}
 
         <div className="form-group">
-          <textarea name="comment" placeholder="Leave a comment (optional)" value={fields.comment} onChange={handleChange} />
+          <textarea
+            id="commentInput"
+            name="comment"
+            placeholder="Leave a comment (optional)"
+            value={comment}
+            onChange={e => setComment(e.target.value)}
+          />
         </div>
 
-        {error && <div className="error-message visible">{error}</div>}
+        <div id="formError" className={`error-message${errorMsg ? ' visible' : ''}`}>
+          {errorMsg}
+        </div>
 
         <button type="submit" className="submit-button">Sign Petition</button>
       </form>
