@@ -16,16 +16,21 @@
  */
 
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
 
+// CORS: allow requests from the React dev server
+app.use(cors({ origin: 'http://localhost:3000' }));
+
 // Serve static files from the public folder
 app.use(express.static('public'));
 
-// Parse form submissions - populates req.body
+// Parse form submissions and JSON request bodies
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // ============================================================
 // In-Memory Signatures Array
@@ -145,6 +150,40 @@ function buildConditionalFields(body) {
 }
 
 // ============================================================
+// GET /api/signatures
+// Returns the full signatures array as JSON.
+// ============================================================
+app.get('/api/signatures', (req, res) => {
+    res.status(200).json(signatures);
+});
+
+// ============================================================
+// POST /api/signatures
+// Accepts a JSON body, validates it, and adds a new signature.
+// Returns 400 with { error } on failure, 201 with the new
+// signature object on success.
+// ============================================================
+app.post('/api/signatures', (req, res) => {
+    const errorMsg = validateForm(req.body);
+    if (errorMsg) {
+        return res.status(400).json({ error: errorMsg });
+    }
+
+    const newSig = {
+        name: req.body.name.trim(),
+        email: req.body.email.trim(),
+        city: req.body.city.trim(),
+        state: req.body.state.trim().toUpperCase(),
+        signerType: req.body.signerType,
+        conditionalFields: buildConditionalFields(req.body),
+        comment: req.body.comment ? req.body.comment.trim() : ""
+    };
+
+    signatures.push(newSig);
+    res.status(201).json(newSig);
+});
+
+// ============================================================
 // GET Route
 // Renders the petition page with the current signatures array.
 // EJS uses the signatures array to render the table server-side.
@@ -198,6 +237,6 @@ app.post('/', (req, res) => {
 // ============================================================
 // Start Server
 // ============================================================
-app.listen(3000, () => {
-    console.log('Server running on http://localhost:3000');
+app.listen(4000, () => {
+    console.log('Server running on http://localhost:4000');
 });
