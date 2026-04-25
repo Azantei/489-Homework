@@ -1,0 +1,294 @@
+c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\server.js
+In index.ejs, replace all the conditional section <select> dropdowns (studentLevel, facultyRole, militaryBranch, militaryStatus, industrySector) and the main signerType dropdown so that each <option> has a selected attribute that checks formData.<fieldName> === '<value>', following the same pattern already used for the text inputs with value="<%= typeof formData !== 'undefined' && formData.name ? formData.name : '' %>".
+Let me read the current index.ejs file to understand the structure.
+
+Read c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\index.ejs
+Globpattern: "**/*.ejs"
+Found 1 file
+Read c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\views\index.ejs
+Now I'll apply all 6 dropdown updates in parallel.
+
+Edit c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\views\index.ejs
+Modified
+Edit c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\views\index.ejs
+Modified
+Edit c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\views\index.ejs
+Modified
+Edit c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\views\index.ejs
+Modified
+Edit c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\views\index.ejs
+Modified
+Edit c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\views\index.ejs
+Modified
+All 6 dropdowns updated. Every <option> (except the placeholder value="" ones) now has a selected attribute using the pattern <%= typeof formData !== 'undefined' && formData.<fieldName> === '<value>' ? 'selected' : '' %>, so the previously chosen value is restored when the server re-renders the form after a validation failure.
+
+Prompt 2 — Re-show the conditional section on validation failure:
+
+In Petition2.js, in the DOMContentLoaded block, add logic that checks if the signerType dropdown already has a value on page load (which happens when the server re-renders after a validation failure) and if so, calls handleSignerTypeChange() to show the correct conditional section immediately.
+
+That second one is a one-liner essentially -- just if (document.getElementById("signerType").value) handleSignerTypeChange(); at the bottom of the DOMContentLoaded block. Claude Code should nail both of these with no ambiguity
+Globpattern: "**/*.js"
+Found 1 file
+Read c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\public\js\Petition2.js
+Edit c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\public\js\Petition2.js
+Added 3 lines
+Done. The one-liner is added at Petition2.js:344 — it fires handleSignerTypeChange() on page load if signerType already has a value, which restores the correct conditional section after a server-side validation failure.
+
+ok let's commit. this was just a bug fix to the code before we start thr assignment
+Bash Show working tree status and diff
+IN
+git status && git diff
+
+OUT
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   public/js/Petition2.js
+	modified:   views/index.ejs
+
+no changes added to commit (use "git add" and/or "git commit -a")
+warning: in the working copy of 'Homework-4/public/js/Petition2.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Homework-4/views/index.ejs', LF will be replaced by CRLF the next time Git touches it
+diff --git a/Homework-4/public/js/Petition2.js b/Homework-4/public/js/Petition2.js
+index 4dc8296..9ee88e5 100644
+--- a/Homework-4/public/js/Petition2.js
++++ b/Homework-4/public/js/Petition2.js
+@@ -341,6 +341,9 @@ document.addEventListener("DOMContentLoaded", function () {
+     // Attach submit listener for client-side validation
+     document.getElementById("petitionForm").addEventListener("submit", handleSubmit);
+ 
++    // Re-show the correct conditional section if the page was re-rendered after a validation failure
++    if (document.getElementById("signerType").value) handleSignerTypeChange();
++
+     // Attach modal click listeners to server-rendered table rows.
+     // Since rows are rendered by the server, we read the signature data
+     // from the data-sig attribute on each row instead of from a JS array.
+diff --git a/Homework-4/views/index.ejs b/Homework-4/views/index.ejs
+index 69ee84d..e6c6a2d 100644
+--- a/Homework-4/views/index.ejs
++++ b/Homework-4/views/index.ejs
+@@ -107,11 +107,11 @@
+                 <div class="form-group">
+                     <select id="signerType" name="signerType">
+                         <option value="">-- I am a ... --</option>
+-                        <option value="Student">Student</option>
+-                        <option value="Faculty">Faculty / Staff</option>
+-                        <option value="Military">Military / Veteran</option>
+-                        <option value="Industry">Industry Professional</option>
+-                        <option value="Other">Other</option>
++                        <option value="Student" <%= typeof formData !== 'undefined' && formData.signerType === 'Student' ? 'selected' : '' %>>Student</option>
++                        <option value="Faculty" <%= typeof formData !== 'undefined' && formData.signerType === 'Faculty' ? 'selected' : '' %>>Faculty / Staff</option>
++                        <option value="Military" <%= typeof formData !== 'undefined' && formData.signerType === 'Military' ? 'selected' : '' %>>Military / Veteran</option>
++                        <option value="Industry" <%= typeof formData !== 'undefined' && formData.signerType === 'Industry' ? 'selected' : '' %>>Industry Professional</option>
++                        <option value="Other" <%= typeof formData !== 'undefined' && formData.signerType === 'Other' ? 'selected' : '' %>>Other</option>
+                     </select>
+                 </div>
+ 
+@@ -130,11 +130,11 @@
+                     <label for="studentLevel">Academic level:</label>
+                     <select id="studentLevel" name="studentLevel">
+                         <option value="">-- Select --</option>
+-                        <option value="Freshman">Freshman</option>
+-                        <option value="Sophomore">Sophomore</option>
+-                        <option value="Junior">Junior</option>
+-                        <option value="Senior">Senior</option>
+-                        <option value="Graduate">Graduate</option>
++                        <option value="Freshman" <%= typeof formData !== 'undefined' && formData.studentLevel === 'Freshman' ? 'selected' : '' %>>Freshman</option>
++                        <option value="Sophomore" <%= typeof formData !== 'undefined' && formData.studentLevel === 'Sophomore' ? 'selected' : '' %>>Sophomore</option>
++                        <option value="Junior" <%= typeof formData !== 'undefined' && formData.studentLevel === 'Junior' ? 'selected' : '' %>>Junior</option>
++                        <option value="Senior" <%= typeof formData !== 'undefined' && formData.studentLevel === 'Senior' ? 'selected' : '' %>>Senior</option>
++                        <option value="Graduate" <%= typeof formData !== 'undefined' && formData.studentLevel === 'Graduate' ? 'selected' : '' %>>Graduate</option>
+                     </select>
+                     <label for="studentMajor">Major (optional):</label>
+                     <input type="text" id="studentMajor" name="studentMajor" placeholder="e.g., Computer Science"
+@@ -146,11 +146,11 @@
+                     <label for="facultyRole">Your role:</label>
+                     <select id="facultyRole" name="facultyRole">
+                         <option value="">-- Select --</option>
+-                        <option value="Professor">Professor</option>
+-                        <option value="Instructor">Instructor</option>
+-                        <option value="TA">TA</option>
+-                        <option value="Administrative">Administrative</option>
+-                        <option value="Research">Research</option>
++                        <option value="Professor" <%= typeof formData !== 'undefined' && formData.facultyRole === 'Professor' ? 'selected' : '' %>>Professor</option>
++                        <option value="Instructor" <%= typeof formData !== 'undefined' && formData.facultyRole === 'Instructor' ? 'selected' : '' %>>Instructor</option>
++                        <option value="TA" <%= typeof formData !== 'undefined' && formData.facultyRole === 'TA' ? 'selected' : '' %>>TA</option>
++                        <option value="Administrative" <%= typeof formData !== 'undefined' && formData.facultyRole === 'Administrative' ? 'selected' : '' %>>Administrative</option>
++                        <option value="Research" <%= typeof formData !== 'undefined' && formData.facultyRole === 'Research' ? 'selected' : '' %>>Research</option>
+                     </select>
+                     <label for="facultyDept">Department:</label>
+                     <input type="text" id="facultyDept" name="facultyDept" placeholder="e.g., School of EECS"
+@@ -162,19 +162,19 @@
+                     <label for="militaryBranch">Branch:</label>
+                     <select id="militaryBranch" name="militaryBranch">
+                         <option value="">-- Select --</option>
+-                        <option value="Army">Army</option>
+-                        <option value="Navy">Navy</option>
+-                        <option value="Air Force">Air Force</option>
+-                        <option value="Marine Corps">Marine Corps</option>
+-                        <option value="Coast Guard">Coast Guard</option>
+-                        <option value="Space Force">Space Force</option>
++                        <option value="Army" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Army' ? 'selected' : '' %>>Army</option>
++                        <option value="Navy" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Navy' ? 'selected' : '' %>>Navy</option>
++                        <option value="Air Force" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Air Force' ? 'selected' : '' %>>Air Force</option>
++                        <option value="Marine Corps" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Marine Corps' ? 'selected' : '' %>>Marine Corps</option>
++                        <option value="Coast Guard" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Coast Guard' ? 'selected' : '' %>>Coast Guard</option>
++                        <option value="Space Force" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Space Force' ? 'selected' : '' %>>Space Force</option>
+                     </select>
+                     <label for="militaryStatus">Status:</label>
+                     <select id="militaryStatus" name="militaryStatus">
+                         <option value="">-- Select --</option>
+-                        <option value="Active Duty">Active Duty</option>
+-                        <option value="Veteran">Veteran</option>
+-                        <option value="Reservist">Reservist</option>
++                        <option value="Active Duty" <%= typeof formData !== 'undefined' && formData.militaryStatus === 'Active Duty' ? 'selected' : '' %>>Active Duty</option>
++                        <option value="Veteran" <%= typeof formData !== 'undefined' && formData.militaryStatus === 'Veteran' ? 'selected' : '' %>>Veteran</option>
++                        <option value="Reservist" <%= typeof formData !== 'undefined' && formData.militaryStatus === 'Reservist' ? 'selected' : '' %>>Reservist</option>
+                     </select>
+                 </div>
+ 
+@@ -183,15 +183,15 @@
+                     <label for="industrySector">Your industry sector:</label>
+                     <select id="industrySector" name="industrySector">
+                         <option value="">-- Select --</option>
+-                        <option value="Technology">Technology</option>
+-                        <option value="Healthcare">Healthcare</option>
+-                        <option value="Finance">Finance</option>
+-                        <option value="Education">Education</option>
+-                        <option value="Manufacturing">Manufacturing</option>
+-                        <option value="Retail">Retail</option>
+-                        <option value="Government">Government</option>
+-                        <option value="Non-profit">Non-profit</option>
+-                        <option value="Other">Other</option>
++                        <option value="Technology" <%= typeof formData !== 'undefined' && formData.industrySector === 'Technology' ? 'selected' : '' %>>Technology</option>
++                        <option value="Healthcare" <%= typeof formData !== 'undefined' && formData.industrySector === 'Healthcare' ? 'selected' : '' %>>Healthcare</option>
++                        <option value="Finance" <%= typeof formData !== 'undefined' && formData.industrySector === 'Finance' ? 'selected' : '' %>>Finance</option>
++                        <option value="Education" <%= typeof formData !== 'undefined' && formData.industrySector === 'Education' ? 'selected' : '' %>>Education</option>
++                        <option value="Manufacturing" <%= typeof formData !== 'undefined' && formData.industrySector === 'Manufacturing' ? 'selected' : '' %>>Manufacturing</option>
++                        <option value="Retail" <%= typeof formData !== 'undefined' && formData.industrySector === 'Retail' ? 'selected' : '' %>>Retail</option>
++                        <option value="Government" <%= typeof formData !== 'undefined' && formData.industrySector === 'Government' ? 'selected' : '' %>>Government</option>
++                        <option value="Non-profit" <%= typeof formData !== 'undefined' && formData.industrySector === 'Non-profit' ? 'selected' : '' %>>Non-profit</option>
++                        <option value="Other" <%= typeof formData !== 'undefined' && formData.industrySector === 'Other' ? 'selected' : '' %>>Other</option>
+                     </select>
+                     <label for="industryCompany">Company name (optional):</label>
+                     <input type="text" id="industryCompany" name="industryCompany" placeholder="e.g., Microsoft"
+Bash Stage and commit the bug fix
+IN
+git add public/js/Petition2.js views/index.ejs && git commit -m "$(cat <<'EOF'
+Fix form state not persisting across validation failures
+
+Restore selected dropdown options and re-show the correct conditional
+section when the server re-renders the form after a validation failure.
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+EOF
+)"
+
+OUT
+warning: in the working copy of 'Homework-4/public/js/Petition2.js', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Homework-4/views/index.ejs', LF will be replaced by CRLF the next time Git touches it
+[main 12df430] Fix form state not persisting across validation failures
+ 2 files changed, 36 insertions(+), 33 deletions(-)
+Committed. Ready to start the assignment whenever you are.
+
+In server.js, add app.use(express.json()) middleware so the server can parse JSON request bodies. Then add: (1) GET /api/signatures that returns the signatures array as JSON with status 200. (2) POST /api/signatures that reads the JSON body, runs the existing validateForm and buildConditionalFields functions adapted for JSON input, and either returns status 400 with { error: errorMsg } on failure, or pushes the new signature and returns it with status 201. Add CORS support using npm install cors then app.use(cors({ origin: 'http://localhost:3000' })) at the top of the middleware section. Change the listen port to 4000.
+Let me read server.js first.
+
+Read c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\server.js
+Bash Install cors package
+IN
+cd "c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4" && npm install cors
+
+OUT
+added 2 packages, and audited 69 packages in 850ms
+
+23 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+Now I'll apply all the changes to server.js.
+
+Edit c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\server.js
+Added 5 lines
+Edit c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\server.js
+Added 34 lines
+Edit c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\server.js
+Modified
+Let me do a quick sanity check on the final file:
+
+Read c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\server.js (lines 19-78)
+Read c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\server.js (lines 149-208)
+Everything looks correct. Here's a summary of what changed in server.js:
+
+Line 19: const cors = require('cors')
+Line 26: app.use(cors({ origin: 'http://localhost:3000' })) — allows the React dev server to call the API
+Line 33: app.use(express.json()) — parses JSON request bodies
+Lines 156–184: GET /api/signatures (returns array, 200) and POST /api/signatures (validates, returns 400+error or 201+newSig) — both reuse the existing validateForm and buildConditionalFields functions unchanged
+Line 237: port changed from 3000 → 4000
+ok commit
+Bash Stage and commit API and CORS changes
+IN
+git add Homework-4/server.js Homework-4/package.json Homework-4/package-lock.json && git commit -m "$(cat <<'EOF'
+Add JSON API endpoints and CORS support for React frontend
+
+Add GET /api/signatures and POST /api/signatures routes, express.json()
+middleware, cors configured for localhost:3000, and move server to port 4000.
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+EOF
+)"
+
+OUT
+Exit code 128
+warning: could not open directory 'Homework-4/Homework-4/': No such file or directory
+fatal: pathspec 'Homework-4/server.js' did not match any files
+Bash Stage and commit API and CORS changes
+IN
+git add server.js package.json package-lock.json && git commit -m "$(cat <<'EOF'
+Add JSON API endpoints and CORS support for React frontend
+
+Add GET /api/signatures and POST /api/signatures routes, express.json()
+middleware, cors configured for localhost:3000, and move server to port 4000.
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+EOF
+)"
+
+OUT
+warning: in the working copy of 'Homework-4/package-lock.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Homework-4/package.json', LF will be replaced by CRLF the next time Git touches it
+[main 590ffed] Add JSON API endpoints and CORS support for React frontend
+ 3 files changed, 70 insertions(+), 3 deletions(-)
+Done. 3 files committed: server.js, package.json, and package-lock.json.
+
+Create a file called requests/signatures.http with three test requests using VS Code REST Client syntax: (1) GET http://localhost:4000/api/signatures, (2) POST to http://localhost:4000/api/signatures with a valid signature JSON body, (3) POST with invalid data (name under 5 chars) to test the error response.
+Bash Create requests directory
+IN
+mkdir -p "c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\requests"
+
+OUT
+(Bash completed with no output)
+Write c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\requests\signatures.http
+35 lines
+Created requests/signatures.http. Click the "Send Request" codelens above each ### block in VS Code (requires the REST Client extension). The third request should come back with 400 and { "error": "Name must be at least 5 characters long." }.
+
+c:\Users\azant\Documents\School\CptS_489\489-Homework\Homework-4\requests\signatures.http
+ok commit
+Bash Stage and commit signatures.http
+IN
+git add requests/signatures.http && git commit -m "$(cat <<'EOF'
+Add REST Client test requests for API endpoints
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+EOF
+)"
+
+OUT
+warning: in the working copy of 'Homework-4/requests/signatures.http', LF will be replaced by CRLF the next time Git touches it
+[main acb137c] Add REST Client test requests for API endpoints
+ 1 file changed, 34 insertions(+)
+ create mode 100644 Homework-4/requests/signatures.http
+Done.
