@@ -1,0 +1,310 @@
+<!-- 
+ ==============================================================
+ index.ejs
+ Camille Orego — CPTS 489 Web Development — Homework 3
+ Builds on Assignment 2
+
+ EJS template for the petition page. Renders server-side using
+ data passed from the Express GET and POST routes in server.js.
+
+ Changes from Assignment 2:
+ - Converted from static HTML to EJS template
+ - Signatures table rendered server-side via EJS loop
+ - Form uses method="POST" action="/" to submit to server
+ - Error messages and form pre-fill handled via EJS variables
+ - name attributes added to all form inputs for req.body parsing
+
+ Developed with assistance from Claude Sonnet 4.6 (Anthropic)
+ All prompts documented in AI Prompts PDF per assignment requirements
+ ==============================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AcmePetition.org - Move CPTS 489 to Afternoon in Winter!</title>
+
+    <!-- Bootstrap CSS: External library for modal dialog functionality -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+
+    <!-- Our Custom Stylesheet -->
+    <link rel="stylesheet" href="/css/Petition2.css">
+</head>
+
+<body>
+    <nav>
+        <a href="https://www.google.com">Home</a>
+        <a href="https://www.google.com">About</a>
+        <a href="https://www.google.com">Categories</a>
+        <a href="https://www.google.com">Contact</a>
+    </nav>
+
+    <div class="container">
+
+        <h1>Move CPTS 489 to Afternoon in Winter!</h1>
+
+        <!-- ============================================================ -->
+        <!-- Petition Content                                             -->
+        <!-- Main petition text and image displayed side by side.        -->
+        <!-- ============================================================ -->
+        <div class="content-wrapper">
+            <div class="petition-body">
+                The image you see on the right is a representation of our professor every morning, right before his 
+                much-needed coffee that helps thaw him out a bit. Imagine having to wake up at 4 or 5 AM in the dead 
+                of winter just to prepare for class. Technically, since the sun hasn't even risen yet, can we really 
+                call 4 AM "morning"? The frigid cold, combined with the mental fog of early hours, is an unfair battle 
+                both for students and faculty alike. No one should have to endure sub-zero temperatures just to attend 
+                an 8 AM lecture. Morning brain freeze inevitably leads to null pointer exceptions in our heads! For 
+                these reasons, we humbly request the administration to consider shifting CPTS 489 to a more humane 
+                afternoon time slot.
+            </div>
+            <div class="petition-image">
+                <img src="/images/s-l400-2.jpg" alt="Jack Nicholson in 'The Shining'">
+            </div>
+        </div>
+        <!-- ============================================================ -->
+        <!-- End Petition Content                                         -->
+        <!-- ============================================================ -->
+
+        <!-- ============================================================ -->
+        <!-- Sign The Petition Form                                       -->
+        <!-- method="POST" sends form data to the server.                -->
+        <!-- action="/" tells it to POST to the root route.              -->
+        <!-- name attributes on inputs let the server read via req.body. -->
+        <!-- ============================================================ -->
+        <div class="signup-module">
+            <h2>Sign the Petition</h2>
+
+            <form id="petitionForm" method="POST" action="/">
+
+                <!-- ============================================================ -->
+                <!-- Basic Fields                                                  -->
+                <!-- value attributes use formData to re-fill fields after a      -->
+                <!-- validation failure so the user doesn't lose their input.     -->
+                <!-- ============================================================ -->
+
+                <div class="form-group">
+                    <input type="text" id="nameInput" name="name" placeholder="Your Name"
+                    value="<%= typeof formData !== 'undefined' && formData.name ? formData.name : '' %>">
+                </div>
+
+                <div class="form-group">
+                    <input type="email" id="emailInput" name="email" placeholder="Your Email"
+                    value="<%= typeof formData !== 'undefined' && formData.email ? formData.email : '' %>">
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="cityInput" name="city" placeholder="City"
+                    value="<%= typeof formData !== 'undefined' && formData.city ? formData.city : '' %>">
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="stateInput" name="state" placeholder="State (e.g., WA)" maxlength="2"
+                    value="<%= typeof formData !== 'undefined' && formData.state ? formData.state : '' %>">
+                </div>
+
+                <div class="form-group">
+                    <select id="signerType" name="signerType">
+                        <option value="">-- I am a ... --</option>
+                        <option value="Student">Student</option>
+                        <option value="Faculty">Faculty / Staff</option>
+                        <option value="Military">Military / Veteran</option>
+                        <option value="Industry">Industry Professional</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- End Basic Fields                                             -->
+                <!-- ============================================================ -->
+
+                <!-- ============================================================ -->
+                <!-- Conditional Sections                                         -->
+                <!-- Shown/hidden by client-side JS based on signer type.        -->
+                <!-- Each section collects extra info relevant to the signer.    -->
+                <!-- ============================================================ -->
+
+                <!-- Student Section -->
+                <div id="section-student" class="conditional-section">
+                    <label for="studentLevel">Academic level:</label>
+                    <select id="studentLevel" name="studentLevel">
+                        <option value="">-- Select --</option>
+                        <option value="Freshman">Freshman</option>
+                        <option value="Sophomore">Sophomore</option>
+                        <option value="Junior">Junior</option>
+                        <option value="Senior">Senior</option>
+                        <option value="Graduate">Graduate</option>
+                    </select>
+                    <label for="studentMajor">Major (optional):</label>
+                    <input type="text" id="studentMajor" name="studentMajor" placeholder="e.g., Computer Science"
+                    value="<%= typeof formData !== 'undefined' && formData.studentMajor ? formData.studentMajor : '' %>">
+                </div>
+
+                <!-- Faculty/Staff Section -->
+                <div id="section-faculty" class="conditional-section">
+                    <label for="facultyRole">Your role:</label>
+                    <select id="facultyRole" name="facultyRole">
+                        <option value="">-- Select --</option>
+                        <option value="Professor">Professor</option>
+                        <option value="Instructor">Instructor</option>
+                        <option value="TA">TA</option>
+                        <option value="Administrative">Administrative</option>
+                        <option value="Research">Research</option>
+                    </select>
+                    <label for="facultyDept">Department:</label>
+                    <input type="text" id="facultyDept" name="facultyDept" placeholder="e.g., School of EECS"
+                    value="<%= typeof formData !== 'undefined' && formData.facultyDept ? formData.facultyDept : '' %>">
+                </div>
+
+                <!-- Military/Veteran Section -->
+                <div id="section-military" class="conditional-section">
+                    <label for="militaryBranch">Branch:</label>
+                    <select id="militaryBranch" name="militaryBranch">
+                        <option value="">-- Select --</option>
+                        <option value="Army">Army</option>
+                        <option value="Navy">Navy</option>
+                        <option value="Air Force">Air Force</option>
+                        <option value="Marine Corps">Marine Corps</option>
+                        <option value="Coast Guard">Coast Guard</option>
+                        <option value="Space Force">Space Force</option>
+                    </select>
+                    <label for="militaryStatus">Status:</label>
+                    <select id="militaryStatus" name="militaryStatus">
+                        <option value="">-- Select --</option>
+                        <option value="Active Duty">Active Duty</option>
+                        <option value="Veteran">Veteran</option>
+                        <option value="Reservist">Reservist</option>
+                    </select>
+                </div>
+
+                <!-- Industry Professional Section -->
+                <div id="section-industry" class="conditional-section">
+                    <label for="industrySector">Your industry sector:</label>
+                    <select id="industrySector" name="industrySector">
+                        <option value="">-- Select --</option>
+                        <option value="Technology">Technology</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Education">Education</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                        <option value="Retail">Retail</option>
+                        <option value="Government">Government</option>
+                        <option value="Non-profit">Non-profit</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <label for="industryCompany">Company name (optional):</label>
+                    <input type="text" id="industryCompany" name="industryCompany" placeholder="e.g., Microsoft"
+                    value="<%= typeof formData !== 'undefined' && formData.industryCompany ? formData.industryCompany : '' %>">
+                </div>
+
+                <!-- Other Section -->
+                <div id="section-other" class="conditional-section">
+                    <label for="otherAffiliation">Please describe your affiliation:</label>
+                    <textarea id="otherAffiliation" name="otherAffiliation" placeholder="Describe your affiliation..."><%= typeof formData !== 'undefined' && formData.otherAffiliation ? formData.otherAffiliation : '' %></textarea>
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- End Conditional Sections                                     -->
+                <!-- ============================================================ -->
+
+                <div class="form-group">
+                    <textarea id="commentInput" name="comment" placeholder="Leave a comment (optional)"><%= typeof formData !== 'undefined' && formData.comment ? formData.comment : '' %></textarea>
+                </div>
+
+                <!-- ============================================================ -->
+                <!-- Server-Side Error Message                                    -->
+                <!-- EJS checks if the server sent back an error and renders it. -->
+                <!-- The visible class makes the error message appear.           -->
+                <!-- ============================================================ -->
+                <% if (typeof errorMsg !== 'undefined' && errorMsg) { %>
+                    <div id="formError" class="error-message visible">
+                        <%= errorMsg %>
+                    </div>
+                <% } else { %>
+                    <div id="formError" class="error-message"></div>
+                <% } %>
+                <!-- ============================================================ -->
+                <!-- End Server-Side Error Message                                -->
+                <!-- ============================================================ -->
+
+                <button type="submit" class="submit-button">Sign Petition</button>
+
+            </form>
+        </div>
+        <!-- ============================================================ -->
+        <!-- End Sign The Petition Form                                   -->
+        <!-- ============================================================ -->
+
+        <!-- ============================================================ -->
+        <!-- Signatures Table                                             -->
+        <!-- The server passes the signatures array to this template.    -->
+        <!-- EJS loops over it and renders one row per signature.        -->
+        <!-- Each row stores the full signature as a data-sig attribute  -->
+        <!-- so the modal can read it when "more »" is clicked.          -->
+        <!-- ============================================================ -->
+        <div class="signatures-module">
+            <h2>Signatures</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>Type</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody id="signaturesBody">
+                    <% signatures.forEach(function(sig) { %>
+                    <tr data-sig='<%- JSON.stringify(sig) %>'>
+                        <td><%= sig.name %></td>
+                        <td><%= sig.city %></td>
+                        <td><%= sig.signerType %></td>
+                        <td><a href="#" class="more-link">more »</a></td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+        <!-- ============================================================ -->
+        <!-- End Signatures Table                                         -->
+        <!-- ============================================================ -->
+
+    </div><!-- End .container -->
+
+    <!-- ============================================================ -->
+    <!-- Bootstrap Modal                                              -->
+    <!-- Appears when user clicks "more »" on a signature row.       -->
+    <!-- Populated by client-side JS reading the data-sig attribute. -->
+    <!-- ============================================================ -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="modal-detail-table">
+                        <tbody id="modalDetailTable">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================================ -->
+    <!-- End Bootstrap Modal                                          -->
+    <!-- ============================================================ -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Our Custom JavaScript -->
+    <script src="/js/Petition2.js"></script>
+
+</body>
+</html>
