@@ -79,3 +79,13 @@ npm install   # first time only
 npm run dev
 ```
 Then open `http://localhost:3000` in a browser.
+
+---
+
+## AI Assistance
+
+Homework-3, Homework-4, and homework-4-react were developed with assistance from:
+- **Claude Sonnet 4.6** (claude.ai, browser) — used for planning, code generation, and review
+- **Claude Code with Claude Sonnet 4.6** (CLI) — used for iterative implementation of the React frontend
+
+All prompts and AI interactions are documented in the `AI-Logs/` folder within each homework directory, per assignment requirements.
