@@ -107,11 +107,11 @@
                 <div class="form-group">
                     <select id="signerType" name="signerType">
                         <option value="">-- I am a ... --</option>
-                        <option value="Student">Student</option>
-                        <option value="Faculty">Faculty / Staff</option>
-                        <option value="Military">Military / Veteran</option>
-                        <option value="Industry">Industry Professional</option>
-                        <option value="Other">Other</option>
+                        <option value="Student" <%= typeof formData !== 'undefined' && formData.signerType === 'Student' ? 'selected' : '' %>>Student</option>
+                        <option value="Faculty" <%= typeof formData !== 'undefined' && formData.signerType === 'Faculty' ? 'selected' : '' %>>Faculty / Staff</option>
+                        <option value="Military" <%= typeof formData !== 'undefined' && formData.signerType === 'Military' ? 'selected' : '' %>>Military / Veteran</option>
+                        <option value="Industry" <%= typeof formData !== 'undefined' && formData.signerType === 'Industry' ? 'selected' : '' %>>Industry Professional</option>
+                        <option value="Other" <%= typeof formData !== 'undefined' && formData.signerType === 'Other' ? 'selected' : '' %>>Other</option>
                     </select>
                 </div>
 
@@ -130,11 +130,11 @@
                     <label for="studentLevel">Academic level:</label>
                     <select id="studentLevel" name="studentLevel">
                         <option value="">-- Select --</option>
-                        <option value="Freshman">Freshman</option>
-                        <option value="Sophomore">Sophomore</option>
-                        <option value="Junior">Junior</option>
-                        <option value="Senior">Senior</option>
-                        <option value="Graduate">Graduate</option>
+                        <option value="Freshman" <%= typeof formData !== 'undefined' && formData.studentLevel === 'Freshman' ? 'selected' : '' %>>Freshman</option>
+                        <option value="Sophomore" <%= typeof formData !== 'undefined' && formData.studentLevel === 'Sophomore' ? 'selected' : '' %>>Sophomore</option>
+                        <option value="Junior" <%= typeof formData !== 'undefined' && formData.studentLevel === 'Junior' ? 'selected' : '' %>>Junior</option>
+                        <option value="Senior" <%= typeof formData !== 'undefined' && formData.studentLevel === 'Senior' ? 'selected' : '' %>>Senior</option>
+                        <option value="Graduate" <%= typeof formData !== 'undefined' && formData.studentLevel === 'Graduate' ? 'selected' : '' %>>Graduate</option>
                     </select>
                     <label for="studentMajor">Major (optional):</label>
                     <input type="text" id="studentMajor" name="studentMajor" placeholder="e.g., Computer Science"
@@ -146,11 +146,11 @@
                     <label for="facultyRole">Your role:</label>
                     <select id="facultyRole" name="facultyRole">
                         <option value="">-- Select --</option>
-                        <option value="Professor">Professor</option>
-                        <option value="Instructor">Instructor</option>
-                        <option value="TA">TA</option>
-                        <option value="Administrative">Administrative</option>
-                        <option value="Research">Research</option>
+                        <option value="Professor" <%= typeof formData !== 'undefined' && formData.facultyRole === 'Professor' ? 'selected' : '' %>>Professor</option>
+                        <option value="Instructor" <%= typeof formData !== 'undefined' && formData.facultyRole === 'Instructor' ? 'selected' : '' %>>Instructor</option>
+                        <option value="TA" <%= typeof formData !== 'undefined' && formData.facultyRole === 'TA' ? 'selected' : '' %>>TA</option>
+                        <option value="Administrative" <%= typeof formData !== 'undefined' && formData.facultyRole === 'Administrative' ? 'selected' : '' %>>Administrative</option>
+                        <option value="Research" <%= typeof formData !== 'undefined' && formData.facultyRole === 'Research' ? 'selected' : '' %>>Research</option>
                     </select>
                     <label for="facultyDept">Department:</label>
                     <input type="text" id="facultyDept" name="facultyDept" placeholder="e.g., School of EECS"
@@ -162,19 +162,19 @@
                     <label for="militaryBranch">Branch:</label>
                     <select id="militaryBranch" name="militaryBranch">
                         <option value="">-- Select --</option>
-                        <option value="Army">Army</option>
-                        <option value="Navy">Navy</option>
-                        <option value="Air Force">Air Force</option>
-                        <option value="Marine Corps">Marine Corps</option>
-                        <option value="Coast Guard">Coast Guard</option>
-                        <option value="Space Force">Space Force</option>
+                        <option value="Army" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Army' ? 'selected' : '' %>>Army</option>
+                        <option value="Navy" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Navy' ? 'selected' : '' %>>Navy</option>
+                        <option value="Air Force" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Air Force' ? 'selected' : '' %>>Air Force</option>
+                        <option value="Marine Corps" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Marine Corps' ? 'selected' : '' %>>Marine Corps</option>
+                        <option value="Coast Guard" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Coast Guard' ? 'selected' : '' %>>Coast Guard</option>
+                        <option value="Space Force" <%= typeof formData !== 'undefined' && formData.militaryBranch === 'Space Force' ? 'selected' : '' %>>Space Force</option>
                     </select>
                     <label for="militaryStatus">Status:</label>
                     <select id="militaryStatus" name="militaryStatus">
                         <option value="">-- Select --</option>
-                        <option value="Active Duty">Active Duty</option>
-                        <option value="Veteran">Veteran</option>
-                        <option value="Reservist">Reservist</option>
+                        <option value="Active Duty" <%= typeof formData !== 'undefined' && formData.militaryStatus === 'Active Duty' ? 'selected' : '' %>>Active Duty</option>
+                        <option value="Veteran" <%= typeof formData !== 'undefined' && formData.militaryStatus === 'Veteran' ? 'selected' : '' %>>Veteran</option>
+                        <option value="Reservist" <%= typeof formData !== 'undefined' && formData.militaryStatus === 'Reservist' ? 'selected' : '' %>>Reservist</option>
                     </select>
                 </div>
 
@@ -183,15 +183,15 @@
                     <label for="industrySector">Your industry sector:</label>
                     <select id="industrySector" name="industrySector">
                         <option value="">-- Select --</option>
-                        <option value="Technology">Technology</option>
-                        <option value="Healthcare">Healthcare</option>
-                        <option value="Finance">Finance</option>
-                        <option value="Education">Education</option>
-                        <option value="Manufacturing">Manufacturing</option>
-                        <option value="Retail">Retail</option>
-                        <option value="Government">Government</option>
-                        <option value="Non-profit">Non-profit</option>
-                        <option value="Other">Other</option>
+                        <option value="Technology" <%= typeof formData !== 'undefined' && formData.industrySector === 'Technology' ? 'selected' : '' %>>Technology</option>
+                        <option value="Healthcare" <%= typeof formData !== 'undefined' && formData.industrySector === 'Healthcare' ? 'selected' : '' %>>Healthcare</option>
+                        <option value="Finance" <%= typeof formData !== 'undefined' && formData.industrySector === 'Finance' ? 'selected' : '' %>>Finance</option>
+                        <option value="Education" <%= typeof formData !== 'undefined' && formData.industrySector === 'Education' ? 'selected' : '' %>>Education</option>
+                        <option value="Manufacturing" <%= typeof formData !== 'undefined' && formData.industrySector === 'Manufacturing' ? 'selected' : '' %>>Manufacturing</option>
+                        <option value="Retail" <%= typeof formData !== 'undefined' && formData.industrySector === 'Retail' ? 'selected' : '' %>>Retail</option>
+                        <option value="Government" <%= typeof formData !== 'undefined' && formData.industrySector === 'Government' ? 'selected' : '' %>>Government</option>
+                        <option value="Non-profit" <%= typeof formData !== 'undefined' && formData.industrySector === 'Non-profit' ? 'selected' : '' %>>Non-profit</option>
+                        <option value="Other" <%= typeof formData !== 'undefined' && formData.industrySector === 'Other' ? 'selected' : '' %>>Other</option>
                     </select>
                     <label for="industryCompany">Company name (optional):</label>
                     <input type="text" id="industryCompany" name="industryCompany" placeholder="e.g., Microsoft"

@@ -341,6 +341,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // Attach submit listener for client-side validation
     document.getElementById("petitionForm").addEventListener("submit", handleSubmit);
 
+    // Re-show the correct conditional section if the page was re-rendered after a validation failure
+    if (document.getElementById("signerType").value) handleSignerTypeChange();
+
     // Attach modal click listeners to server-rendered table rows.
     // Since rows are rendered by the server, we read the signature data
     // from the data-sig attribute on each row instead of from a JS array.
